@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Box, Button, ButtonGroup, IconButton, AppBar, Toolbar, Typography } from '@mui/material';
 import UndoIcon from '@mui/icons-material/Undo';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Graph from '../shared/Graph';
 
 function SandboxMode() {
+    const graphRef = useRef(null);
     const [nodes, setNodes] = useState([]);
     const [links, setLinks] = useState([]);
     const [selectedNodes, setSelectedNodes] = useState([]);
@@ -26,24 +27,14 @@ function SandboxMode() {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    const addNode = (event) => {
-        // Prevent the click from bubbling up to parent elements
-        event.stopPropagation();
-
-        // Get the graph container element
-        const graphContainer = event.currentTarget;
-        const rect = graphContainer.getBoundingClientRect();
-
-        // Calculate coordinates relative to the container, accounting for scroll
-        const x = event.clientX - rect.left + graphContainer.scrollLeft;
-        const y = event.clientY - rect.top + graphContainer.scrollTop;
-
+    const addNode = (coords) => {
+        const { x, y } = coords;
         const newNode = {
             id: nodes.length,
             x: x,
             y: y,
-            fx: x, // Fix the node position in x
-            fy: y  // Fix the node position in y
+            fx: x,
+            fy: y
         };
 
         saveState();
@@ -120,18 +111,19 @@ function SandboxMode() {
             </AppBar>
 
             <Box
+                ref={graphRef}
                 sx={{
                     flexGrow: 1,
                     position: 'relative',
                     cursor: 'pointer'
                 }}
-                onClick={addNode}
             >
                 <Graph
                     nodes={nodes}
                     links={links}
                     onNodeClick={handleNodeClick}
                     onLinkClick={handleLinkClick}
+                    onBackgroundClick={addNode}
                     width={dimensions.width}
                     height={dimensions.height}
                 />
