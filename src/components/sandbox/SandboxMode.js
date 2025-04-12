@@ -47,7 +47,7 @@ function SandboxMode() {
             const newLink = {
                 source: selectedNodes[0].id,
                 target: node.id,
-                color: '#999'
+                color: 'var(--color-edge-default)'
             };
 
             saveState();
@@ -64,7 +64,7 @@ function SandboxMode() {
             if (l === link) {
                 return {
                     ...l,
-                    color: l.color === 'red' ? 'blue' : 'red'
+                    color: l.color === 'var(--color-edge-red)' ? 'var(--color-edge-blue)' : 'var(--color-edge-red)'
                 };
             }
             return l;
@@ -94,7 +94,7 @@ function SandboxMode() {
 
     return (
         <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-            <AppBar position="static">
+            <AppBar position="static" sx={{ bgcolor: 'var(--color-paper)' }}>
                 <Toolbar>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         Sandbox Mode
@@ -115,7 +115,8 @@ function SandboxMode() {
                 sx={{
                     flexGrow: 1,
                     position: 'relative',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    backgroundColor: 'var(--color-background)', // Changed from --color-paper
                 }}
             >
                 <Graph
@@ -126,6 +127,7 @@ function SandboxMode() {
                     onBackgroundClick={addNode}
                     width={dimensions.width}
                     height={dimensions.height}
+                    linkColor="var(--color-edge-default)"
                 />
             </Box>
         </Box>

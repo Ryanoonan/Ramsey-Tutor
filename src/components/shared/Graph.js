@@ -1,16 +1,20 @@
 import { useRef, useEffect, useCallback } from 'react';
 
-const Graph = ({ nodes, links, onNodeClick, onLinkClick, onBackgroundClick, width = 800, height = 600, nodeRadius = 20, lineWidth = 12, linkColor = 'black' }) => {
+const Graph = ({ nodes, links, onNodeClick, onLinkClick, onBackgroundClick, width = 800, height = 600, nodeRadius = 30, lineWidth = 7, linkColor = 'var(--color-edge-default)' }) => {
     const canvasRef = useRef();
 
     // Draw everything on each render
     useEffect(() => {
         if (!canvasRef.current) return;
         const ctx = canvasRef.current.getContext('2d');
+        // Get the computed values of CSS variables
+        const nodeBorderColor = getComputedStyle(document.documentElement).getPropertyValue('--color-node-border').trim();
+        const nodeFillColor = getComputedStyle(document.documentElement).getPropertyValue('--color-node-fill').trim();
+
         ctx.clearRect(0, 0, width, height);
 
         // Draw links
-        ctx.strokeStyle = 'rgba(0, 0, 0, 1)';
+        ctx.strokeStyle = 'var(--color-edge-default)';
         links.forEach(link => {
             const source = typeof link.source === 'object' ? link.source : nodes.find(n => n.id === link.source);
             const target = typeof link.target === 'object' ? link.target : nodes.find(n => n.id === link.target);
@@ -19,7 +23,7 @@ const Graph = ({ nodes, links, onNodeClick, onLinkClick, onBackgroundClick, widt
             ctx.moveTo(source.x, source.y);
             ctx.lineTo(target.x, target.y);
             ctx.lineWidth = lineWidth;
-            ctx.strokeStyle = linkColor;
+            ctx.strokeStyle = link.color || linkColor;
             ctx.stroke();
         });
 
@@ -27,8 +31,11 @@ const Graph = ({ nodes, links, onNodeClick, onLinkClick, onBackgroundClick, widt
         nodes.forEach(node => {
             ctx.beginPath();
             ctx.arc(node.x, node.y, nodeRadius, 0, 2 * Math.PI);
-            ctx.fillStyle = 'black';
+            ctx.fillStyle = nodeFillColor;
             ctx.fill();
+            ctx.strokeStyle = nodeBorderColor;
+            ctx.lineWidth = 2;
+            ctx.stroke();
         });
     }, [nodes, links, width, height, nodeRadius, lineWidth, linkColor]);
 
@@ -77,7 +84,7 @@ const Graph = ({ nodes, links, onNodeClick, onLinkClick, onBackgroundClick, widt
                 ref={canvasRef}
                 width={width}
                 height={height}
-                style={{ backgroundColor: '#ffffff', cursor: 'pointer' }}
+                style={{ cursor: 'pointer' }}
                 onClick={handleCanvasClick}
             />
         </div>

@@ -16,7 +16,9 @@ function LandingPage() {
             position: 'fixed',
             width: '100%',
             height: '100%',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            backgroundColor: 'var(--color-background)',
+            color: 'var(--color-text-primary)'
         }}>
             <Particles
                 id="tsparticles"
@@ -28,12 +30,12 @@ function LandingPage() {
                     },
                     background: {
                         color: {
-                            value: "#ffffff",
+                            value: 'var(--color-paper)',
                         },
                     },
                     particles: {
                         color: {
-                            value: "#1976d2",
+                            value: 'var(--color-node-fill)',
                         },
                         move: {
                             enable: true,
@@ -61,7 +63,7 @@ function LandingPage() {
                         links: {
                             enable: true,
                             distance: 150,
-                            color: "#1976d2",
+                            color: 'var(--color-edge-default)',
                             opacity: 0.4,
                             width: 1,
                         },
@@ -82,7 +84,8 @@ function LandingPage() {
                     top: '50%',
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
-                    zIndex: 1
+                    zIndex: 1,
+                    color: 'var(--color-text-primary)'
                 }}
             >
                 <Box

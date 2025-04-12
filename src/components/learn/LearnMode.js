@@ -69,7 +69,7 @@ function LearnMode() {
                 newLinks.push({
                     source: i,
                     target: j,
-                    color: '#999',
+                    color: 'var(--color-edge-default)',
                 });
             }
         }
@@ -86,7 +86,7 @@ function LearnMode() {
                 (ep[0] === pair[0] && ep[1] === pair[1]) ||
                 (ep[0] === reversePair[0] && ep[1] === reversePair[1])
             )) {
-                return { ...link, color };
+                return { ...link, color: `var(--color-edge-${color})` };
             }
             return link;
         }));
@@ -117,18 +117,29 @@ function LearnMode() {
     };
 
     return (
-        <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column', p: 2 }}>
+        <Box sx={{
+            height: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            p: 2,
+            backgroundColor: 'var(--color-paper)'
+        }}>
             <Typography variant="h4" gutterBottom>
                 Learn Mode: R(3) = 6
             </Typography>
 
             <Box sx={{ flex: 1, display: 'flex', gap: 2 }}>
-                <Box id="learn-graph-container" sx={{ flex: 1, minHeight: '600px' }}>
+                <Box id="learn-graph-container" sx={{
+                    flex: 1,
+                    minHeight: '600px',
+                    backgroundColor: 'var(--color-paper)'
+                }}>
                     <Graph
                         nodes={nodes}
                         links={links}
                         width={dimensions.width}
                         height={dimensions.height}
+                        linkColor="var(--color-edge-default)"
                     />
                 </Box>
 
@@ -169,3 +180,4 @@ function LearnMode() {
 }
 
 export default LearnMode;
+

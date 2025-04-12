@@ -7,13 +7,22 @@ import './App.css';
 
 const theme = createTheme({
   palette: {
+    mode: 'dark',
     primary: {
-      main: '#1976d2',
+      main: '#1a237e', // Same as --color-node-fill
     },
     secondary: {
-      main: '#dc004e',
+      main: '#ffffff', // Same as --color-edge-default
     },
-  },
+    background: {
+      default: '#1a1a1a', // Same as --color-background
+      paper: '#1a1a1a', // Same as --color-paper
+    },
+    text: {
+      primary: '#ffffff', // Same as --color-text-primary
+      secondary: '#e0e0e0', // Same as --color-text-secondary
+    }
+  }
 });
 
 function App() {
