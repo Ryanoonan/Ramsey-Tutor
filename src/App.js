@@ -16,11 +16,21 @@ const theme = createTheme({
     },
     background: {
       default: '#1a1a1a', // Same as --color-background
-      paper: '#1a1a1a', // Same as --color-paper
+      paper: 'var(--color-paper)', // Same as --color-paper
     },
     text: {
       primary: '#ffffff', // Same as --color-text-primary
       secondary: '#e0e0e0', // Same as --color-text-secondary
+    }
+  },
+  components: {
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          backgroundColor: 'var(--color-paper)',
+          backgroundImage: 'none',
+        }
+      }
     }
   }
 });

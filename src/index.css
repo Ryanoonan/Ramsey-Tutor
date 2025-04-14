@@ -1,16 +1,17 @@
 :root {
   /* Theme colors */
-  --color-background: #3d414c;
-  --color-paper: #222531;
+  --color-background: #ffffff;
+  --color-paper: #5e6693;
 
   /* Node colors */
-  --color-node-fill: #280051;
-  --color-node-border: #ffffff;
+  --color-node-fill: #6fcfff;
+  --color-node-border: #000000;
+  --color-progress-node: #27124c;
 
   /* Edge colors */
-  --color-edge-default: #ffffff;
-  --color-edge-red: #3d0bc6;
-  --color-edge-blue: #0000ff;
+  --color-edge-default: #e600ff7c;
+  --color-edge-red: #f91e1e;
+  --color-edge-blue: #0d00ff;
 
   /* Text colors */
   --color-text-primary: #ffffff;

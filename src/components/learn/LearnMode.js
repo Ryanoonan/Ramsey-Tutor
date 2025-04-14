@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Box, Button, Typography, Stepper, Step, StepLabel, Paper } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { Box, Button, Typography, Stepper, Step, StepLabel, Paper, AppBar, Toolbar } from '@mui/material';
 import Graph from '../shared/Graph';
 
 function LearnMode() {
+    const navigate = useNavigate();
     const [currentStep, setCurrentStep] = useState(0);
     const [nodes, setNodes] = useState([]);
     const [links, setLinks] = useState([]);
@@ -117,22 +119,28 @@ function LearnMode() {
     };
 
     return (
-        <Box sx={{
-            height: '100vh',
-            display: 'flex',
-            flexDirection: 'column',
-            p: 2,
-            backgroundColor: 'var(--color-paper)'
-        }}>
-            <Typography variant="h4" gutterBottom>
-                Learn Mode: R(3) = 6
-            </Typography>
+        <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+            <AppBar position="static" sx={{ bgcolor: 'var(--color-paper)' }}>
+                <Toolbar>
+                    <Button color="inherit" onClick={() => navigate('/')} sx={{ mr: 2 }}>
+                        Back to Menu
+                    </Button>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        Learn Mode: R(3) = 6
+                    </Typography>
+                </Toolbar>
+            </AppBar>
 
-            <Box sx={{ flex: 1, display: 'flex', gap: 2 }}>
+            <Box sx={{
+                flex: 1,
+                display: 'flex',
+                gap: 2,
+                p: 2,
+                backgroundColor: 'var(--color-background)'
+            }}>
                 <Box id="learn-graph-container" sx={{
                     flex: 1,
-                    minHeight: '600px',
-                    backgroundColor: 'var(--color-paper)'
+                    minHeight: '600px'
                 }}>
                     <Graph
                         nodes={nodes}
@@ -143,8 +151,41 @@ function LearnMode() {
                     />
                 </Box>
 
-                <Paper sx={{ flex: 1, p: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
-                    <Stepper activeStep={currentStep} orientation="vertical">
+                <Paper sx={{
+                    flex: 1,
+                    p: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 2,
+                    bgcolor: 'var(--color-paper)',
+                    color: 'var(--color-text-primary)',
+                    boxShadow: 'none',
+                    borderRadius: 1
+                }}>
+                    <Stepper
+                        activeStep={currentStep}
+                        orientation="vertical"
+                        sx={{
+                            '& .MuiStepLabel-label': {
+                                color: 'var(--color-text-primary)'
+                            },
+                            '& .MuiStepIcon-root': {
+                                color: 'var(--color-progress-node)',
+                                '&.Mui-active': {
+                                    color: 'var(--color-progress-node)'
+                                }
+                            },
+                            '& .MuiStepConnector-root .MuiStepConnector-line': {
+                                borderColor: 'var(--color-edge-default)'  // Changed from text-primary to edge-default
+                            },
+                            '& .Mui-disabled': {
+                                color: 'var(--color-text-secondary)'
+                            },
+                            '& .MuiStep-root': {
+                                color: 'var(--color-text-primary)'
+                            }
+                        }}
+                    >
                         {steps.map((step, index) => (
                             <Step key={index}>
                                 <StepLabel>

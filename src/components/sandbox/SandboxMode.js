@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Box, Button, ButtonGroup, IconButton, AppBar, Toolbar, Typography } from '@mui/material';
 import UndoIcon from '@mui/icons-material/Undo';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Graph from '../shared/Graph';
 
 function SandboxMode() {
+    const navigate = useNavigate();
     const graphRef = useRef(null);
     const [nodes, setNodes] = useState([]);
     const [links, setLinks] = useState([]);
@@ -43,11 +45,16 @@ function SandboxMode() {
 
     const handleNodeClick = (node) => {
         if (selectedNodes.length === 1 && selectedNodes[0].id !== node.id) {
+            // Get computed color value
+            const computedColor = getComputedStyle(document.documentElement)
+                .getPropertyValue('--color-edge-red')
+                .trim();
+
             // Create edge between nodes
             const newLink = {
                 source: selectedNodes[0].id,
                 target: node.id,
-                color: 'var(--color-edge-default)'
+                color: computedColor
             };
 
             saveState();
@@ -62,10 +69,14 @@ function SandboxMode() {
         saveState();
         const newLinks = links.map(l => {
             if (l === link) {
-                return {
-                    ...l,
-                    color: l.color === 'var(--color-edge-red)' ? 'var(--color-edge-blue)' : 'var(--color-edge-red)'
-                };
+                const computedRed = getComputedStyle(document.documentElement)
+                    .getPropertyValue('--color-edge-red')
+                    .trim();
+                const computedBlue = getComputedStyle(document.documentElement)
+                    .getPropertyValue('--color-edge-blue')
+                    .trim();
+                const newColor = l.color === computedRed ? computedBlue : computedRed;
+                return { ...l, color: newColor };
             }
             return l;
         });
@@ -96,6 +107,9 @@ function SandboxMode() {
         <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
             <AppBar position="static" sx={{ bgcolor: 'var(--color-paper)' }}>
                 <Toolbar>
+                    <Button color="inherit" onClick={() => navigate('/')} sx={{ mr: 2 }}>
+                        Back to Menu
+                    </Button>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         Sandbox Mode
                     </Typography>
