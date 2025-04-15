@@ -14,8 +14,8 @@
   --color-edge-blue: #0d00ff;
 
   /* Text colors */
-  --color-text-primary: #ffffff;
-  --color-text-secondary: #e0e0e0;
+  --color-text-primary: #000000;
+  --color-text-secondary: #606060;
 }
 
 body {
