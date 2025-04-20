@@ -1,15 +1,11 @@
 import { useRef, useEffect, useCallback } from 'react';
 
-const Graph = ({ nodes, links, onNodeClick, onLinkClick, onBackgroundClick, width = 800, height = 600, nodeRadius = 30, lineWidth = 6, linkColor = 'var(--color-edge-red)' }) => {
+const Graph = ({ nodes, links, onNodeClick, onLinkClick, onBackgroundClick, width = 800, height = 600, nodeRadius = 30, lineWidth = 6, linkColor = 'var(--color-edge-red)', highlightedNode = null }) => {
     const canvasRef = useRef();
     const nodeBoundaryWidth = 5; // New constant for node boundary width
 
     // Draw everything on each render
     useEffect(() => {
-
-
-
-
         if (!canvasRef.current) return;
         const ctx = canvasRef.current.getContext('2d');
 
@@ -32,8 +28,19 @@ const Graph = ({ nodes, links, onNodeClick, onLinkClick, onBackgroundClick, widt
             ctx.stroke();
         });
 
-        // Draw nodes
+        // Draw nodes and highlight
         nodes.forEach(node => {
+            // Draw highlight if this is the highlighted node
+            if (highlightedNode !== null && node.id === highlightedNode) {
+                console.log("Highlighted node")
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, nodeRadius + 10, 0, 2 * Math.PI);
+                ctx.strokeStyle = '#00ff00';
+                ctx.lineWidth = 3;
+                ctx.stroke();
+            }
+
+            // Draw the node
             ctx.beginPath();
             ctx.arc(node.x, node.y, nodeRadius, 0, 2 * Math.PI);
             ctx.fillStyle = nodeFillColor;
@@ -42,7 +49,7 @@ const Graph = ({ nodes, links, onNodeClick, onLinkClick, onBackgroundClick, widt
             ctx.lineWidth = nodeBoundaryWidth;
             ctx.stroke();
         });
-    }, [nodes, links, width, height, nodeRadius, lineWidth, linkColor]);
+    }, [nodes, links, width, height, nodeRadius, lineWidth, linkColor, highlightedNode]);
 
     // Utility for checking distance of point->line
     const pointToLineDistance = (px, py, x1, y1, x2, y2) => {
