@@ -16,48 +16,49 @@ function LandingPage() {
             alignItems: 'center',
             justifyContent: 'center'
         }}>
-            <Container
-                maxWidth="md"
+            <Box
                 sx={{
-                    color: 'var(--color-text-secondary)'
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: 4,
                 }}
             >
-                <Box
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        gap: 4,
-                    }}
-                >
-                    <Typography variant="h2" component="h1" gutterBottom color="var(--color-text-primary)">
-                        Ramsey Theory Visualizer
-                    </Typography>
+                <Typography variant="h2" component="h1" gutterBottom color="var(--color-text-primary)">
+                    Ramsey Theory Visualizer
+                </Typography>
 
-                    <Typography variant="h5" component="h2" gutterBottom color="var(--color-text-secondary)">
-                        Explore and understand Ramsey theory through interactive visualization
-                    </Typography>
+                <Typography variant="h5" component="h2" gutterBottom color="var(--color-text-secondary)">
+                    Explore and understand Ramsey theory through interactive visualization
+                </Typography>
 
-                    <Box sx={{ display: 'flex', gap: 3, mt: 4 }}>
-                        <Button
-                            variant="contained"
-                            size="large"
-                            onClick={() => navigate('/sandbox')}
-                            sx={{ minWidth: 200 }}
-                        >
-                            Sandbox Mode
-                        </Button>
-                        <Button
-                            variant="contained"
-                            size="large"
-                            onClick={() => navigate('/learn')}
-                            sx={{ minWidth: 200 }}
-                        >
-                            Learn Mode
-                        </Button>
-                    </Box>
+                <Box sx={{ display: 'flex', gap: 3, mt: 4 }}>
+                    <Button
+                        variant="contained"
+                        size="large"
+                        onClick={() => navigate('/sandbox')}
+                        sx={{ minWidth: 200 }}
+                    >
+                        Sandbox Mode
+                    </Button>
+                    <Button
+                        variant="contained"
+                        size="large"
+                        onClick={() => navigate('/learn')}
+                        sx={{ minWidth: 200 }}
+                    >
+                        Learn Mode
+                    </Button>
+                    <Button
+                        variant="contained"
+                        size="large"
+                        onClick={() => navigate('/learnmenu')}
+                        sx={{ minWidth: 200 }}
+                    >
+                        Learn Menu
+                    </Button>
                 </Box>
-            </Container>
+            </Box>
         </Box>
     );
 }
