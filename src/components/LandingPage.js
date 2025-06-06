@@ -1,8 +1,9 @@
-import { Box, Button, Typography, Container } from '@mui/material';
+import { Box, Button, Typography, Container, useTheme } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 function LandingPage() {
     const navigate = useNavigate();
+    const theme = useTheme();
 
     return (
         <Box sx={{
@@ -10,8 +11,8 @@ function LandingPage() {
             width: '100%',
             height: '100%',
             overflow: 'hidden',
-            backgroundColor: 'var(--color-background)',
-            color: 'var(--color-text-primary)',
+            backgroundColor: theme.palette.background.default,
+            color: theme.palette.text.primary,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
@@ -24,11 +25,11 @@ function LandingPage() {
                     gap: 4,
                 }}
             >
-                <Typography variant="h2" component="h1" gutterBottom color="var(--color-text-primary)">
+                <Typography variant="h2" component="h1" gutterBottom color="text.primary">
                     Ramsey Theory Visualizer
                 </Typography>
 
-                <Typography variant="h5" component="h2" gutterBottom color="var(--color-text-secondary)">
+                <Typography variant="h5" component="h2" gutterBottom color="text.secondary">
                     Explore and understand Ramsey theory through interactive visualization
                 </Typography>
 

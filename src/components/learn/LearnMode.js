@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Button, Typography, Paper, AppBar, Toolbar } from '@mui/material';
+import { Box, Button, Typography, Paper, AppBar, Toolbar, useTheme } from '@mui/material';
 import Graph from '../shared/Graph';
 
 function LearnMode() {
+    const theme = useTheme();
     const navigate = useNavigate();
     const [currentStep, setCurrentStep] = useState(-1);
     const [currentPage, setCurrentPage] = useState(0);
@@ -70,9 +71,9 @@ function LearnMode() {
     }, []);
 
     const initializeK6 = () => {
-        // Resolve default edge color from CSS custom property
-        const css = getComputedStyle(document.documentElement);
-        const defaultColor = css.getPropertyValue('--color-edge-default').trim();
+        // Use theme color instead of CSS variable
+        const defaultColor = theme.palette.custom.edgeDefault;
+
         // Create 6 nodes in a circular arrangement
         const newNodes = Array.from({ length: 6 }, (_, i) => ({
             id: i,
@@ -109,8 +110,8 @@ function LearnMode() {
             if (shouldColor) {
                 return {
                     ...link,
-                    color: getComputedStyle(document.documentElement)
-                        .getPropertyValue(`--color-edge-${color}`).trim()
+                    // Use theme color instead of CSS variable
+                    color: theme.palette.custom[`edge${color === 'red' ? 'Red' : 'Blue'}`]
                 };
             }
             console.log("not coloring link", link)
@@ -166,7 +167,7 @@ function LearnMode() {
 
     return (
         <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-            <AppBar position="static" sx={{ bgcolor: 'var(--color-paper)' }}>
+            <AppBar position="static" sx={{ bgcolor: theme.palette.background.paper }}>
                 <Toolbar>
                     <Button color="inherit" onClick={() => navigate('/')} sx={{ mr: 2 }}>
                         Back to Menu
@@ -182,7 +183,7 @@ function LearnMode() {
                 display: 'flex',
                 gap: 2,
                 p: 2,
-                backgroundColor: 'var(--color-background)'
+                backgroundColor: theme.palette.background.default
             }}>
                 <Box id="learn-graph-container" sx={{
                     flex: 1,
@@ -193,7 +194,7 @@ function LearnMode() {
                         links={links}
                         width={dimensions.width}
                         height={dimensions.height}
-                        linkColor="var(--color-edge-default)"
+                        linkColor={theme.palette.custom.edgeDefault}
                         highlightedNode={highlightedNode}
                     />
                 </Box>
@@ -204,8 +205,8 @@ function LearnMode() {
                     display: 'flex',
                     flexDirection: 'column',
                     gap: 2,
-                    bgcolor: 'var(--color-paper)',
-                    color: 'var(--color-text-primary)',
+                    bgcolor: theme.palette.background.paper,
+                    color: theme.palette.text.primary,
                     boxShadow: 'none',
                     borderRadius: 1
                 }}>

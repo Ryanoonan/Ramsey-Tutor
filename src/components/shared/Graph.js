@@ -1,17 +1,21 @@
 import { useRef, useEffect, useCallback } from 'react';
+import { useTheme } from '@mui/material/styles';
 
-const Graph = ({ nodes, links, onNodeClick, onLinkClick, onBackgroundClick, width = 800, height = 600, nodeRadius = 30, lineWidth = 6, linkColor = 'var(--color-edge-red)', highlightedNode = null }) => {
+function Graph({ nodes, links, onNodeClick, onLinkClick, onBackgroundClick, width = 800, height = 600, nodeRadius = 30, lineWidth = 6, highlightedNode = null }) {
+
+    const theme = useTheme();
     const canvasRef = useRef();
     const nodeBoundaryWidth = 5; // New constant for node boundary width
 
     // Draw everything on each render
     useEffect(() => {
+
         if (!canvasRef.current) return;
         const ctx = canvasRef.current.getContext('2d');
 
         // Get the computed values of CSS variables
-        const nodeBorderColor = getComputedStyle(document.documentElement).getPropertyValue('--color-node-border').trim();
-        const nodeFillColor = getComputedStyle(document.documentElement).getPropertyValue('--color-node-fill').trim();
+        const nodeBorderColor = theme.palette.custom.nodeBorder;
+        const nodeFillColor = theme.palette.custom.nodeFill;
 
         ctx.clearRect(0, 0, width, height);
 
@@ -49,7 +53,7 @@ const Graph = ({ nodes, links, onNodeClick, onLinkClick, onBackgroundClick, widt
             ctx.lineWidth = nodeBoundaryWidth;
             ctx.stroke();
         });
-    }, [nodes, links, width, height, nodeRadius, lineWidth, linkColor, highlightedNode]);
+    }, [nodes, links, width, height, nodeRadius, lineWidth, highlightedNode]);
 
     // Utility for checking distance of point->line
     const pointToLineDistance = (px, py, x1, y1, x2, y2) => {
