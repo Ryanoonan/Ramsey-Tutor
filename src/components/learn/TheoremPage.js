@@ -6,7 +6,6 @@ import Graph from '../shared/Graph';
 function TheoremPage() {
     const theme = useTheme();
     const navigate = useNavigate();
-    const [currentStep, setCurrentStep] = useState(-1);
     const [currentPage, setCurrentPage] = useState(0);
     const [currentStepInPage, setCurrentStepInPage] = useState(0);
     const [showProof, setShowProof] = useState(false);
@@ -17,40 +16,36 @@ function TheoremPage() {
         width: 600,
         height: 600
     });
+    const [nextStepIndex, setNextStepIndex] = useState(0);
+    const [visibleSteps, setVisibleSteps] = useState([]);
+    const maxStepsToShow = 3;
 
-    const pages = [
+    const steps = [
         {
-            steps: [
-                {
-                    content: 'Proof: Choose any node.',
-                    action: () => {
-                        setHighlightedNode(nodes[0].id);
-                    }
-                },
-                {
-                    content: 'This node has 5 outgoing edges. By pigeonhole principle, if we color them with red and blue, at least 3 edges must be the same color. WLOG these edges are red.',
-                    action: () => {
-                        colorEdges([[0, 1], [0, 2], [0, 3]], 'red');
-                    }
-                }
-            ]
+            content: 'Proof: Choose any node.',
+            action: () => {
+                setHighlightedNode(nodes[0].id);
+            }
         },
         {
-            steps: [
-                {
-                    content: 'For each uncolored edge, coloring this red would lead to a red triangle. Therefore these edges must be blue.',
-                    action: () => {
-                        colorEdges([[1, 2], [1, 3], [2, 3]], 'blue');
-                    }
-                },
-                {
-                    content: 'We have formed a blue triangle! Therefore it is impossible to color the edges of K6 with 2 colors without forming a monochromatic triangle.',
-                    action: () => {
-                        // Final state already shown
-                    }
-                }
-            ]
+            content: 'This node has 5 outgoing edges. By pigeonhole principle, if we color them with red and blue, at least 3 edges must be the same color. WLOG these edges are red.',
+            action: () => {
+                colorEdges([[0, 1], [0, 2], [0, 3]], 'red');
+            }
+        },
+        {
+            content: 'For each uncolored edge, coloring this red would lead to a red triangle. Therefore these edges must be blue.',
+            action: () => {
+                colorEdges([[1, 2], [1, 3], [2, 3]], 'blue');
+            }
+        },
+        {
+            content: 'We have formed a blue triangle! Therefore it is impossible to color the edges of K6 with 2 colors without forming a monochromatic triangle.',
+            action: () => {
+                // Final state already shown
+            }
         }
+
     ];
 
     useEffect(() => {
@@ -124,45 +119,38 @@ function TheoremPage() {
     }, []);
 
     const handleNext = () => {
-        const currentPageSteps = pages[currentPage].steps;
+        if (nextStepIndex >= steps.length) return;
 
-        if (currentStepInPage < currentPageSteps.length - 1) {
-            // Move to next step in current page
-            const nextStep = currentPageSteps[currentStepInPage + 1];
-            if (nextStep.action) {
-                nextStep.action();
-            }
-            setCurrentStepInPage(currentStepInPage + 1);
-        } else if (currentPage < pages.length - 1) {
-            // Move to first step of next page
-            const nextPageFirstStep = pages[currentPage + 1].steps[0];
-            if (nextPageFirstStep.action) {
-                nextPageFirstStep.action();
-            }
-            setCurrentPage(currentPage + 1);
-            setCurrentStepInPage(0);
+        const newItem = steps[nextStepIndex];
+        if (newItem.action) {
+            newItem.action();
         }
+
+        if (visibleSteps.length < maxStepsToShow) {
+            setVisibleSteps(v => [...v, newItem]);
+        } else {
+            setVisibleSteps([newItem]);
+        }
+        setNextStepIndex(i => i + 1);
     };
 
     const handlePrevious = () => {
-        if (currentStepInPage > 0) {
-            // Move to previous step in current page
-            const prevStep = pages[currentPage].steps[currentStepInPage - 1];
-            if (prevStep.action) {
-                prevStep.action();
-            }
-            setCurrentStepInPage(currentStepInPage - 1);
-        } else if (currentPage > 0) {
-            // Move to last step of previous page
-            const prevPage = pages[currentPage - 1];
-            const lastStepIndex = prevPage.steps.length - 1;
-            const lastStep = prevPage.steps[lastStepIndex];
-            if (lastStep.action) {
-                lastStep.action();
-            }
-            setCurrentPage(currentPage - 1);
-            setCurrentStepInPage(lastStepIndex);
+        if (nextStepIndex <= 1) return;
+
+        const prevIndex = nextStepIndex - 2;
+        const prevItem = steps[prevIndex];
+
+        if (prevItem.action) {
+            prevItem.action();
         }
+
+        if (visibleSteps.length > 1) {
+            setVisibleSteps(v => v.slice(0, -1));
+        } else {
+            setVisibleSteps(steps.slice(nextStepIndex - 1 - maxStepsToShow, nextStepIndex - 1));
+        }
+
+        setNextStepIndex(i => i - 1);
     };
 
     return (
@@ -228,10 +216,12 @@ function TheoremPage() {
                                 variant="contained"
                                 onClick={() => {
                                     setShowProof(true);
-                                    const firstStep = pages[0].steps[0];
+                                    const firstStep = steps[0];
                                     if (firstStep.action) {
                                         firstStep.action();
                                     }
+                                    setVisibleSteps([firstStep]);
+                                    setNextStepIndex(1);
                                 }}
                                 sx={{ alignSelf: 'flex-start' }}
                             >
@@ -239,22 +229,20 @@ function TheoremPage() {
                             </Button>
                         ) : (
                             <>
-                                {pages[currentPage].steps
-                                    .slice(0, currentStepInPage + 1)
-                                    .map((step, idx) => (
-                                        <Typography
-                                            key={idx}
-                                            variant="body1"
-                                            sx={{
-                                                textAlign: 'left',
-                                                fontSize: '1.8rem',
-                                                fontFamily: 'Helvetica',
-                                                mb: idx < currentStepInPage ? 2 : 0
-                                            }}
-                                        >
-                                            {step.content}
-                                        </Typography>
-                                    ))}
+                                {visibleSteps.map((step, idx) => (
+                                    <Typography
+                                        key={idx}
+                                        variant="body1"
+                                        sx={{
+                                            textAlign: 'left',
+                                            fontSize: '1.8rem',
+                                            fontFamily: 'Helvetica',
+                                            mb: idx < visibleSteps.length - 1 ? 2 : 0
+                                        }}
+                                    >
+                                        {step.content}
+                                    </Typography>
+                                ))}
                             </>
                         )}
                     </Box>
@@ -263,14 +251,14 @@ function TheoremPage() {
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
                             <Button
                                 onClick={handlePrevious}
-                                disabled={currentPage === 0 && currentStepInPage === 0}
+                                disabled={nextStepIndex === 1}
                             >
                                 Previous
                             </Button>
                             <Button
                                 variant="contained"
                                 onClick={handleNext}
-                                disabled={currentPage === pages.length - 1 && currentStepInPage === pages[currentPage].steps.length - 1}
+                                disabled={nextStepIndex >= steps.length}
                             >
                                 Next
                             </Button>
