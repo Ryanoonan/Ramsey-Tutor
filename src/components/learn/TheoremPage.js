@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Button, Typography, Paper, AppBar, Toolbar, useTheme } from '@mui/material';
 import Graph from '../shared/Graph';
 
-function LearnMode() {
+function TheoremPage() {
     const theme = useTheme();
     const navigate = useNavigate();
     const [currentStep, setCurrentStep] = useState(-1);
@@ -282,5 +282,5 @@ function LearnMode() {
     );
 }
 
-export default LearnMode;
+export default TheoremPage;
 
