@@ -177,7 +177,7 @@ function TheoremPage() {
                                 mb: 2
                             }}
                         >
-                            Theorem: It is impossible to color the edges of K₆ red and blue without forming a monochromatic triangle.
+                            {currentTheoremData.theoremName}
                         </Typography>
 
                         {!showProof ? (
