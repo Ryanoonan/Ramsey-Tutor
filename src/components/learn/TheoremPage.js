@@ -2,13 +2,11 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Typography, Paper, AppBar, Toolbar, useTheme } from '@mui/material';
 import Graph from '../shared/Graph';
-import { KnGraph } from '../../createGraph';
+import StepsByPage from '../../theoremData';
 
 function TheoremPage() {
     const theme = useTheme();
     const navigate = useNavigate();
-    const [currentPage, setCurrentPage] = useState(0);
-    const [currentStepInPage, setCurrentStepInPage] = useState(0);
     const [showProof, setShowProof] = useState(false);
     const [nodes, setNodes] = useState([]);
     const [links, setLinks] = useState([]);
@@ -21,32 +19,22 @@ function TheoremPage() {
     const [visibleSteps, setVisibleSteps] = useState([]);
     const maxStepsToShow = 3;
 
-    const steps = [
-        {
-            content: 'Proof: Choose any node.',
-            action: () => {
-                setHighlightedNode(0);
+    // For now just the first one
+    const currentTheoremData = StepsByPage[0];
+    const steps = currentTheoremData.steps.map(step => ({
+        content: step.content,
+        action: () => {
+            if (step.highlightedNodes) {
+                setHighlightedNode(step.highlightedNodes[0]);
             }
-        },
-        {
-            content: 'This node has 5 outgoing edges. By pigeonhole principle, if we color them with red and blue, at least 3 edges must be the same color. WLOG these edges are red.',
-            action: () => {
-                colorEdges([[0, 1], [0, 2], [0, 3]], 'red');
+            if (step.redEdges && step.redEdges.length > 0) {
+                colorEdges(step.redEdges, 'red');
             }
-        },
-        {
-            content: 'For each uncolored edge, coloring this red would lead to a red triangle. Therefore these edges must be blue.',
-            action: () => {
-                colorEdges([[1, 2], [1, 3], [2, 3]], 'blue');
-            }
-        },
-        {
-            content: 'We have formed a blue triangle! Therefore it is impossible to color the edges of K6 with 2 colors without forming a monochromatic triangle.',
-            action: () => {
-                // Final state already shown
+            if (step.blueEdges && step.blueEdges.length > 0) {
+                colorEdges(step.blueEdges, 'blue');
             }
         }
-    ];
+    }));
 
     useEffect(() => {
         const updateDimensions = () => {
@@ -65,12 +53,11 @@ function TheoremPage() {
         return () => window.removeEventListener('resize', updateDimensions);
     }, []);
 
-    const initializeK6 = () => {
-        // Use theme color instead of CSS variable
-        const defaultColor = theme.palette.custom.edgeDefault;
-        const [newNodes, newLinks] = KnGraph(6, defaultColor);
-        setNodes(newNodes);
-        setLinks(newLinks);
+    const initializeGraph = () => {
+        const [initNodes, initLinks] = currentTheoremData.initialGraph;
+        setNodes(initNodes);
+        setLinks(initLinks);
+
     };
 
     const colorEdges = (edgePairs, color) => {
@@ -95,7 +82,7 @@ function TheoremPage() {
     };
 
     useEffect(() => {
-        initializeK6();
+        initializeGraph();
     }, []);
 
     const handleNext = () => {
@@ -141,7 +128,7 @@ function TheoremPage() {
                         Back to Menu
                     </Button>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        Learn Mode: R(3) = 6
+                        {currentTheoremData.theoremName}
                     </Typography>
                 </Toolbar>
             </AppBar>
