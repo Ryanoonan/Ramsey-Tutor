@@ -21,22 +21,65 @@ function TheoremPage() {
     const [visibleSteps, setVisibleSteps] = useState([]);
     const maxStepsToShow = 3;
 
-    // For now just the first one
     const currentTheoremData = StepsByPage.filter(item => item.theoremNameSlug === slug)[0] || StepsByPage[0];
+
+    const executeStepAction = (step) => {
+        colorEdges(step);
+        if (step.highlightedNodes) {
+            setHighlightedNode(step.highlightedNodes[0]);
+        }
+        if (step.newSubGraphNodes) {
+            const newNodes = nodes.filter(node =>
+                step.newSubGraphNodes.includes(node.id)
+            )
+            const newNodeIds = newNodes.map(node => node.id);
+            const newLinks = links.filter(link =>
+                newNodeIds.includes(link.edge[0]) && newNodeIds.includes(link.edge[1])
+            );
+            console.log('new links', newLinks);
+            setLinks(newLinks);
+            setNodes(newNodes);
+        }
+    };
+
     const steps = currentTheoremData.steps.map(step => ({
         content: step.content,
-        action: () => {
-            if (step.highlightedNodes) {
-                setHighlightedNode(step.highlightedNodes[0]);
-            }
-            if (step.redEdges && step.redEdges.length > 0) {
-                colorEdges(step.redEdges, 'red');
-            }
-            if (step.blueEdges && step.blueEdges.length > 0) {
-                colorEdges(step.blueEdges, 'blue');
-            }
-        }
+        action: () => executeStepAction(step),
+        redEdges: step.redEdges,
+        blueEdges: step.blueEdges,
+        highlightedNodes: step.highlightedNodes,
+        newSubGraphNodes: step.newSubGraphNodes
     }));
+
+    function areEdgesEqual(e1, e2) {
+        return (
+            (e1[0] === e2[0] && e1[1] === e2[1]) ||
+            (e1[0] === e2[1] && e1[1] === e2[0])
+        );
+    }
+
+    function colorEdges(step) {
+        const redEdges = step?.redEdges || [];
+        console.log('red edges', redEdges);
+        console.log('this', step?.redEdges)
+        const blueEdges = step?.blueEdges || [];
+
+        const newLinks = links.map(link => {
+            const isRed = redEdges.some(edge => areEdgesEqual(edge, link.edge)
+            );
+            const isBlue = blueEdges.some(edge => areEdgesEqual(edge, link.edge)
+            );
+
+            if (isRed) {
+                return { ...link, color: theme.palette.custom.edgeRed };
+            } else if (isBlue) {
+                return { ...link, color: theme.palette.custom.edgeBlue };
+            } else {
+                return { ...link, color: theme.palette.custom.edgeDefault };
+            }
+        })
+        setLinks(newLinks);
+    }
 
     useEffect(() => {
         const updateDimensions = () => {
@@ -62,26 +105,6 @@ function TheoremPage() {
 
     };
 
-    const colorEdges = (edgePairs, color) => {
-        const areEdgesEqual = (e1, e2) =>
-            (e1[0] === e2[0] && e1[1] === e2[1]) ||
-            (e1[0] === e2[1] && e1[1] === e2[0]);
-
-        setLinks(links => links.map(link => {
-            const shouldColor = edgePairs.some(edgePair =>
-                areEdgesEqual(edgePair, link.edge)
-            );
-
-            if (shouldColor) {
-                return {
-                    ...link,
-                    color: theme.palette.custom[`edge${color === 'red' ? 'Red' : 'Blue'}`]
-                };
-            }
-
-            return link;
-        }));
-    };
 
     useEffect(() => {
         initializeGraph();

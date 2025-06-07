@@ -22,7 +22,13 @@ const StepsByPage = [
             },
             {
                 content: 'For each uncolored edge, coloring this red would lead to a red triangle. Therefore these edges must be blue.',
+                redEdges: [[0, 1], [0, 2], [0, 3]],
                 blueEdges: [[1, 2], [1, 3], [2, 3]],
+
+            },
+            {
+                content: "Empty",
+                newSubGraphNodes: [0, 1, 2, 3]
             },
             {
                 content: 'We have formed a blue triangle! Therefore it is impossible to color the edges of K6 with 2 colors without forming a monochromatic triangle.',
