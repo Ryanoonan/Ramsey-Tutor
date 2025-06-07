@@ -6,7 +6,8 @@ import { KnGraph } from "./createGraph";
 
 const StepsByPage = [
     {
-        theoremName: "R(6) = 3",
+        theoremName: "R(3) = 6",
+        theoremNameSlug: "r3-equals-6",
         initialGraph: KnGraph(6, "black"),
         steps: [
             {
@@ -27,6 +28,19 @@ const StepsByPage = [
                 content: 'We have formed a blue triangle! Therefore it is impossible to color the edges of K6 with 2 colors without forming a monochromatic triangle.',
             }
 
+        ]
+    },
+    {
+        theoremName: "K10 Single Edge",
+        theoremNameSlug: "k10-single-edge",
+        initialGraph: KnGraph(10, "black"),
+        steps: [
+            {
+                content: 'Here we color a single edge in the K10 graph.',
+                redEdges: [[0, 1]],
+                blueEdges: [],
+                highlightedNodes: []
+            }
         ]
     }
 ]

@@ -40,15 +40,7 @@ function LandingPage() {
                         onClick={() => navigate('/sandbox')}
                         sx={{ minWidth: 200 }}
                     >
-                        Sandbox Mode
-                    </Button>
-                    <Button
-                        variant="contained"
-                        size="large"
-                        onClick={() => navigate('/learn')}
-                        sx={{ minWidth: 200 }}
-                    >
-                        Learn Mode
+                        Sandbox
                     </Button>
                     <Button
                         variant="contained"
@@ -56,7 +48,7 @@ function LandingPage() {
                         onClick={() => navigate('/learnmenu')}
                         sx={{ minWidth: 200 }}
                     >
-                        Learn Menu
+                        Learn
                     </Button>
                 </Box>
             </Box>

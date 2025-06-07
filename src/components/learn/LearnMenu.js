@@ -1,13 +1,12 @@
 import { Box, Typography, Container } from '@mui/material';
+import StepsByPage from '../../theoremData';
 
 function LearnMenu() {
 
-    const pages = [
-        { name: 'R(3) = 3', link: '/learn/r3-3' },
-        { name: 'Item 2', link: '/learn/item-2' },
-        { name: 'Item 3', link: '/learn/item-3' },
-        { name: 'Item 4', link: '/learn/item-4' },
-    ];
+    const pages = StepsByPage.map(theorem => ({
+        name: theorem.theoremName,
+        link: `/learn/${theorem.theoremNameSlug}`
+    }));
 
     return (
         <Container>

@@ -3,8 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Button, Typography, Paper, AppBar, Toolbar, useTheme } from '@mui/material';
 import Graph from '../shared/Graph';
 import StepsByPage from '../../theoremData';
+import { useParams } from 'react-router-dom'
 
 function TheoremPage() {
+    const { slug } = useParams();
     const theme = useTheme();
     const navigate = useNavigate();
     const [showProof, setShowProof] = useState(false);
@@ -20,7 +22,7 @@ function TheoremPage() {
     const maxStepsToShow = 3;
 
     // For now just the first one
-    const currentTheoremData = StepsByPage[0];
+    const currentTheoremData = StepsByPage.filter(item => item.theoremNameSlug === slug)[0] || StepsByPage[0];
     const steps = currentTheoremData.steps.map(step => ({
         content: step.content,
         action: () => {

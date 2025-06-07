@@ -16,7 +16,7 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/sandbox" element={<SandboxMode />} />
             <Route path="/learnmenu" element={<LearnMenu />} />
-            <Route path="/learn" element={<TheoremPage />} />
+            <Route path="/learn/:slug" element={<TheoremPage />} />
           </Routes>
         </div>
       </Router>
