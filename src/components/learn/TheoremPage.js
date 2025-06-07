@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Typography, Paper, AppBar, Toolbar, useTheme } from '@mui/material';
 import Graph from '../shared/Graph';
+import { KnGraph } from '../../createGraph';
 
 function TheoremPage() {
     const theme = useTheme();
@@ -67,25 +68,7 @@ function TheoremPage() {
     const initializeK6 = () => {
         // Use theme color instead of CSS variable
         const defaultColor = theme.palette.custom.edgeDefault;
-
-        // Create 6 nodes in a circular arrangement
-        const newNodes = Array.from({ length: 6 }, (_, i) => ({
-            id: i,
-            x: 300 + 150 * Math.cos((i * 2 * Math.PI) / 6),
-            y: 300 + 150 * Math.sin((i * 2 * Math.PI) / 6),
-        }));
-
-        // Create all possible edges
-        const newLinks = [];
-        for (let i = 0; i < 6; i++) {
-            for (let j = i + 1; j < 6; j++) {
-                newLinks.push({
-                    edge: [i, j],
-                    color: defaultColor
-                });
-            }
-        }
-
+        const [newNodes, newLinks] = KnGraph(6, defaultColor);
         setNodes(newNodes);
         setLinks(newLinks);
     };
@@ -266,6 +249,7 @@ function TheoremPage() {
         </Box >
     );
 }
+
 
 export default TheoremPage;
 
