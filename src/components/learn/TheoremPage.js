@@ -24,7 +24,7 @@ function TheoremPage() {
         {
             content: 'Proof: Choose any node.',
             action: () => {
-                setHighlightedNode(nodes[0].id);
+                setHighlightedNode(0);
             }
         },
         {
@@ -45,7 +45,6 @@ function TheoremPage() {
                 // Final state already shown
             }
         }
-
     ];
 
     useEffect(() => {
@@ -80,7 +79,10 @@ function TheoremPage() {
         const newLinks = [];
         for (let i = 0; i < 6; i++) {
             for (let j = i + 1; j < 6; j++) {
-                newLinks.push({ source: i, target: j, color: defaultColor });
+                newLinks.push({
+                    edge: [i, j],
+                    color: defaultColor
+                });
             }
         }
 
@@ -88,28 +90,23 @@ function TheoremPage() {
         setLinks(newLinks);
     };
 
-    const areEdgesEqual = (edge1, edge2) => {
-        return (edge1[0] === edge2[0] && edge1[1] === edge2[1]) ||
-            (edge1[0] === edge2[1] && edge1[1] === edge2[0]);
-    };
-
     const colorEdges = (edgePairs, color) => {
-        console.log('Coloring edges:', edgePairs, 'with color:', color);
-        setLinks(links => links.map(link => { //TODO: Change the type of link to just be a list of 2 elements
-            // Convert link to comparable format
-            const currentEdge = [link.source, link.target];
+        const areEdgesEqual = (e1, e2) =>
+            (e1[0] === e2[0] && e1[1] === e2[1]) ||
+            (e1[0] === e2[1] && e1[1] === e2[0]);
 
-            // Check if this edge should be colored
-            const shouldColor = edgePairs.some(edgePair => areEdgesEqual(edgePair, currentEdge));
+        setLinks(links => links.map(link => {
+            const shouldColor = edgePairs.some(edgePair =>
+                areEdgesEqual(edgePair, link.edge)
+            );
 
             if (shouldColor) {
                 return {
                     ...link,
-                    // Use theme color instead of CSS variable
                     color: theme.palette.custom[`edge${color === 'red' ? 'Red' : 'Blue'}`]
                 };
             }
-            console.log("not coloring link", link)
+
             return link;
         }));
     };

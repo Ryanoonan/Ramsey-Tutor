@@ -35,9 +35,7 @@ function SandboxMode() {
         const newNode = {
             id: nodes.length,
             x: x,
-            y: y,
-            fx: x,
-            fy: y
+            y: y
         };
 
         saveState();
@@ -46,13 +44,10 @@ function SandboxMode() {
 
     const handleNodeClick = (node) => {
         if (selectedNodes.length === 1 && selectedNodes[0].id !== node.id) {
-            // Use theme color instead of CSS variable
             const computedColor = theme.palette.custom.edgeRed;
 
-            // Create edge between nodes
             const newLink = {
-                source: selectedNodes[0].id,
-                target: node.id,
+                edge: [selectedNodes[0].id, node.id],
                 color: computedColor
             };
 
@@ -68,7 +63,6 @@ function SandboxMode() {
         saveState();
         const newLinks = links.map(l => {
             if (l === link) {
-                // Use theme colors instead of CSS variables
                 const computedRed = theme.palette.custom.edgeRed;
                 const computedBlue = theme.palette.custom.edgeBlue;
                 const newColor = l.color === computedRed ? computedBlue : computedRed;

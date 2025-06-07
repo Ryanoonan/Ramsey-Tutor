@@ -21,8 +21,11 @@ function Graph({ nodes, links, onNodeClick, onLinkClick, onBackgroundClick, widt
 
         // Draw links
         links.forEach(link => {
-            const source = typeof link.source === 'object' ? link.source : nodes.find(n => n.id === link.source);
-            const target = typeof link.target === 'object' ? link.target : nodes.find(n => n.id === link.target);
+            // Get source and target nodes from edge property
+            const [sourceId, targetId] = link.edge;
+            const source = nodes.find(n => n.id === sourceId);
+            const target = nodes.find(n => n.id === targetId);
+
             if (!source || !target) return;
             ctx.beginPath();
             ctx.moveTo(source.x, source.y);
@@ -81,8 +84,10 @@ function Graph({ nodes, links, onNodeClick, onLinkClick, onBackgroundClick, widt
         }
         // Check links next
         for (const link of links) {
-            const source = typeof link.source === 'object' ? link.source : nodes.find(n => n.id === link.source);
-            const target = typeof link.target === 'object' ? link.target : nodes.find(n => n.id === link.target);
+            const [sourceId, targetId] = link.edge;
+            const source = nodes.find(n => n.id === sourceId);
+            const target = nodes.find(n => n.id === targetId);
+
             if (!source || !target) continue;
             const dist = pointToLineDistance(offsetX, offsetY, source.x, source.y, target.x, target.y);
             if (dist < 5) {
