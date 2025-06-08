@@ -10,8 +10,7 @@ function TheoremPage() {
     const theme = useTheme();
     const navigate = useNavigate();
     const [showProof, setShowProof] = useState(false);
-    const [nodes, setNodes] = useState([]);
-    const [links, setLinks] = useState([]);
+    const [graph, setGraph] = useState({ nodes: [], links: [] });
     const [highlightedNode, setHighlightedNode] = useState(null);
     const [dimensions, setDimensions] = useState({
         width: 600,
@@ -29,16 +28,18 @@ function TheoremPage() {
             setHighlightedNode(step.highlightedNodes[0]);
         }
         if (step.newSubGraphNodes) {
-            const newNodes = nodes.filter(node =>
+            const newNodes = graph.nodes.filter(node =>
                 step.newSubGraphNodes.includes(node.id)
             )
             const newNodeIds = newNodes.map(node => node.id);
-            const newLinks = links.filter(link =>
+            const newLinks = graph.links.filter(link =>
                 newNodeIds.includes(link.edge[0]) && newNodeIds.includes(link.edge[1])
             );
             console.log('new links', newLinks);
-            setLinks(newLinks);
-            setNodes(newNodes);
+            setGraph({
+                nodes: newNodes,
+                links: newLinks
+            });
         }
     };
 
@@ -64,7 +65,7 @@ function TheoremPage() {
         console.log('this', step?.redEdges)
         const blueEdges = step?.blueEdges || [];
 
-        const newLinks = links.map(link => {
+        const newLinks = graph.links.map(link => {
             const isRed = redEdges.some(edge => areEdgesEqual(edge, link.edge)
             );
             const isBlue = blueEdges.some(edge => areEdgesEqual(edge, link.edge)
@@ -78,7 +79,10 @@ function TheoremPage() {
                 return { ...link, color: theme.palette.custom.edgeDefault };
             }
         })
-        setLinks(newLinks);
+        setGraph(prev => ({
+            ...prev,
+            links: newLinks
+        }));
     }
 
     useEffect(() => {
@@ -100,11 +104,11 @@ function TheoremPage() {
 
     const initializeGraph = () => {
         const [initNodes, initLinks] = currentTheoremData.initialGraph;
-        setNodes(initNodes);
-        setLinks(initLinks);
-
+        setGraph({
+            nodes: initNodes,
+            links: initLinks
+        });
     };
-
 
     useEffect(() => {
         initializeGraph();
@@ -170,8 +174,8 @@ function TheoremPage() {
                     minHeight: '600px'
                 }}>
                     <Graph
-                        nodes={nodes}
-                        links={links}
+                        nodes={graph.nodes}
+                        links={graph.links}
                         width={dimensions.width}
                         height={dimensions.height}
                         linkColor={theme.palette.custom.edgeDefault}
