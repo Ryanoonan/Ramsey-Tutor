@@ -1,45 +1,65 @@
-import { useRef, useEffect, useCallback } from 'react';
+import { useRef, useEffect, useCallback, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
+import { lerp, lerpColor, easeInOutCubic, applyOpacity } from '../../animationHelpers';
 
-function Graph({ nodes, links, onNodeClick, onLinkClick, onBackgroundClick, width = 800, height = 600, nodeRadius = 30, lineWidth = 6, highlightedNode = null }) {
+function Graph({
+    nodes,
+    links,
+    onNodeClick,
+    onLinkClick,
+    onBackgroundClick,
+    width = 800,
+    height = 600,
+    nodeRadius = 30,
+    lineWidth = 6,
+    highlightedNode = null,
+    animationDuration = 800,
+    shouldAnimate = false
+}) {
 
     const theme = useTheme();
     const canvasRef = useRef();
-    const nodeBoundaryWidth = 5; // New constant for node boundary width
+    const animationRef = useRef();
+    const startTimeRef = useRef(null);
+    const nodesRef = useRef([]);
+    const linksRef = useRef([]);
+    const prevNodesRef = useRef([]);
+    const prevLinksRef = useRef([]);
+    const isAnimatingRef = useRef(false);
+    const nodeBoundaryWidth = 5;
+    const nodeMapRef = useRef({});
+    const linkMapRef = useRef({});
 
-    // Draw everything on each render
-    useEffect(() => {
-
+    const drawGraph = useCallback((nodesToDraw, linksToDraw) => {
         if (!canvasRef.current) return;
         const ctx = canvasRef.current.getContext('2d');
-
-        // Get the computed values of CSS variables
         const nodeBorderColor = theme.palette.custom.nodeBorder;
         const nodeFillColor = theme.palette.custom.nodeFill;
 
         ctx.clearRect(0, 0, width, height);
 
         // Draw links
-        links.forEach(link => {
-            // Get source and target nodes from edge property
+        linksToDraw.forEach(link => {
             const [sourceId, targetId] = link.edge;
-            const source = nodes.find(n => n.id === sourceId);
-            const target = nodes.find(n => n.id === targetId);
+            const source = nodesToDraw.find(n => n.id === sourceId);
+            const target = nodesToDraw.find(n => n.id === targetId);
 
             if (!source || !target) return;
             ctx.beginPath();
             ctx.moveTo(source.x, source.y);
             ctx.lineTo(target.x, target.y);
             ctx.lineWidth = lineWidth;
-            ctx.strokeStyle = link.color;
+            if (link.opacity !== undefined) {
+                ctx.strokeStyle = applyOpacity(link.color || 'black', link.opacity);
+            } else {
+                ctx.strokeStyle = link.color || 'black';
+            }
+
             ctx.stroke();
         });
 
-        // Draw nodes and highlight
-        nodes.forEach(node => {
-            // Draw highlight if this is the highlighted node
+        nodesToDraw.forEach(node => {
             if (highlightedNode !== null && node.id === highlightedNode) {
-                console.log("Highlighted node")
                 ctx.beginPath();
                 ctx.arc(node.x, node.y, nodeRadius + 10, 0, 2 * Math.PI);
                 ctx.strokeStyle = '#00ff00';
@@ -47,16 +67,160 @@ function Graph({ nodes, links, onNodeClick, onLinkClick, onBackgroundClick, widt
                 ctx.stroke();
             }
 
-            // Draw the node
+            // Draw node
             ctx.beginPath();
             ctx.arc(node.x, node.y, nodeRadius, 0, 2 * Math.PI);
-            ctx.fillStyle = nodeFillColor;
+
+            if (node.opacity !== undefined) {
+                ctx.fillStyle = applyOpacity(nodeFillColor, node.opacity);
+                ctx.strokeStyle = applyOpacity(nodeBorderColor, node.opacity);
+            } else {
+                ctx.fillStyle = nodeFillColor;
+                ctx.strokeStyle = nodeBorderColor;
+            }
+
             ctx.fill();
-            ctx.strokeStyle = nodeBorderColor;
             ctx.lineWidth = nodeBoundaryWidth;
             ctx.stroke();
         });
-    }, [nodes, links, width, height, nodeRadius, lineWidth, highlightedNode]);
+    }, [width, height, nodeRadius, lineWidth, highlightedNode, theme.palette.custom]);
+
+
+
+    // Animation loop function
+    const animationTick = useCallback((timestamp) => {
+        if (!startTimeRef.current) startTimeRef.current = timestamp;
+        const elapsedTime = timestamp - startTimeRef.current;
+        const progress = Math.min(elapsedTime / animationDuration, 1);
+        const easedProgress = easeInOutCubic(progress);
+
+        const interpolatedNodes = prevNodesRef.current.map(prevNode => {
+            const targetNode = nodeMapRef.current[prevNode.id];
+            if (!targetNode) {
+                // Node is being removed - fade it out
+                return {
+                    ...prevNode,
+                    opacity: 1 - easedProgress
+                };
+            }
+
+            return {
+                ...prevNode,
+                x: lerp(prevNode.x, targetNode.x, easedProgress),
+                y: lerp(prevNode.y, targetNode.y, easedProgress)
+            };
+        });
+
+        // Add any new nodes that weren't in the previous state
+        nodes.forEach(newNode => {
+            if (!prevNodesRef.current.some(n => n.id === newNode.id)) {
+                interpolatedNodes.push({
+                    ...newNode,
+                    opacity: easedProgress
+                });
+            }
+        });
+
+        const interpolatedLinks = prevLinksRef.current.map(prevLink => {
+            const linkId = `${prevLink.edge[0]}-${prevLink.edge[1]}`;
+            const targetLink = linkMapRef.current[linkId];
+
+            if (!targetLink) {
+                return {
+                    ...prevLink,
+                    color: prevLink.color,
+                    opacity: 1 - easedProgress
+                };
+            }
+            return {
+                ...prevLink,
+                color: targetLink.color
+            };
+        });
+
+        // Add new links
+        links.forEach(newLink => {
+            const linkId = `${newLink.edge[0]}-${newLink.edge[1]}`;
+            if (!prevLinksRef.current.some(l =>
+                `${l.edge[0]}-${l.edge[1]}` === linkId
+            )) {
+                interpolatedLinks.push({
+                    ...newLink,
+                    opacity: easedProgress,
+                    color: newLink.color
+                });
+            }
+        });
+
+        // Draw the interpolated state
+        drawGraph(interpolatedNodes, interpolatedLinks);
+
+        // Continue animation if not complete
+        if (progress < 1) {
+            animationRef.current = requestAnimationFrame(animationTick);
+        } else {
+            // Animation complete - update refs to current state
+            nodesRef.current = [...nodes];
+            linksRef.current = [...links];
+            isAnimatingRef.current = false;
+
+            // Wait a small amount of time before drawing the final state
+            // This ensures the fade-out completes visually
+            setTimeout(() => {
+                // Draw the final state without any fade effects
+                drawGraph(nodes, links);
+            }, 50);
+        }
+    }, [nodes, links, animationDuration, drawGraph]);
+
+    useEffect(() => {
+        const newNodeMap = {};
+        nodes.forEach(node => {
+            newNodeMap[node.id] = node;
+        });
+        nodeMapRef.current = newNodeMap;
+
+        const newLinkMap = {};
+        links.forEach(link => {
+            const linkId = `${link.edge[0]}-${link.edge[1]}`;
+            newLinkMap[linkId] = link;
+        });
+        linkMapRef.current = newLinkMap;
+
+        // If this is the first render, set the refs without animating
+        if (nodesRef.current.length === 0 && linksRef.current.length === 0) {
+            nodesRef.current = [...nodes];
+            linksRef.current = [...links];
+            prevNodesRef.current = [...nodes];
+            prevLinksRef.current = [...links];
+            drawGraph(nodes, links);
+            return;
+        }
+        if (animationRef.current) {
+            cancelAnimationFrame(animationRef.current);
+        }
+
+        if (shouldAnimate) {
+            prevNodesRef.current = [...nodesRef.current];
+            prevLinksRef.current = [...linksRef.current];
+
+            startTimeRef.current = null;
+            isAnimatingRef.current = true;
+
+            animationRef.current = requestAnimationFrame(animationTick);
+        } else {
+            nodesRef.current = [...nodes];
+            linksRef.current = [...links];
+            drawGraph(nodes, links);
+        }
+
+        // Cleanup function to cancel animation on unmount or when deps change
+        return () => {
+            if (animationRef.current) {
+                cancelAnimationFrame(animationRef.current);
+            }
+        };
+    }, [nodes, links, drawGraph, animationTick, shouldAnimate]);
 
     // Utility for checking distance of point->line
     const pointToLineDistance = (px, py, x1, y1, x2, y2) => {

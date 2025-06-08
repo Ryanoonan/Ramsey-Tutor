@@ -30,6 +30,7 @@ const StepsByPage = [
             {
                 content: "Empty",
                 graph: KnGraph({ n: 4, redEdges: [[0, 1], [0, 2], [0, 3]], blueEdges: [[1, 2], [1, 3], [2, 3]] }),
+                shouldAnimate: true,
             },
             {
                 content: 'We have formed a blue triangle! Therefore it is impossible to color the edges of K6 with 2 colors without forming a monochromatic triangle.',

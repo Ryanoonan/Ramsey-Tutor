@@ -22,6 +22,8 @@ function TheoremPage() {
 
     const currentTheoremData = StepsByPage.filter(item => item.theoremNameSlug === slug)[0] || StepsByPage[0];
 
+    const [shouldAnimate, setShouldAnimate] = useState(false);
+
     const executeStepAction = (step) => {
         if (step.graph) {
             const [nodes, links] = step.graph;
@@ -36,7 +38,6 @@ function TheoremPage() {
         } else {
             setHighlightedNode(null);
         }
-
     };
 
     const steps = currentTheoremData.steps.map(step => ({
@@ -44,7 +45,8 @@ function TheoremPage() {
         action: () => executeStepAction(step),
         graph: step.graph,
         highlightedNodes: step.highlightedNodes,
-        newSubGraphNodes: step.newSubGraphNodes
+        newSubGraphNodes: step.newSubGraphNodes,
+        shouldAnimate: step.shouldAnimate || false
     }));
 
     useEffect(() => {
@@ -80,6 +82,9 @@ function TheoremPage() {
         if (nextStepIndex >= steps.length) return;
 
         const newItem = steps[nextStepIndex];
+
+        setShouldAnimate(newItem.shouldAnimate || false);
+
         if (newItem.action) {
             newItem.action();
         }
@@ -97,6 +102,10 @@ function TheoremPage() {
 
         const prevIndex = nextStepIndex - 2;
         const prevItem = steps[prevIndex];
+        const currentItem = steps[nextStepIndex - 1];
+
+        // When going backward, use the current step's shouldAnimate property
+        setShouldAnimate(currentItem.shouldAnimate || false);
 
         if (prevItem.action) {
             prevItem.action();
@@ -142,6 +151,7 @@ function TheoremPage() {
                         height={dimensions.height}
                         linkColor={theme.palette.custom.edgeDefault}
                         highlightedNode={highlightedNode}
+                        shouldAnimate={shouldAnimate}
                     />
                 </Box>
 
