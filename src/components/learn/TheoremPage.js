@@ -23,67 +23,29 @@ function TheoremPage() {
     const currentTheoremData = StepsByPage.filter(item => item.theoremNameSlug === slug)[0] || StepsByPage[0];
 
     const executeStepAction = (step) => {
-        colorEdges(step);
-        if (step.highlightedNodes) {
-            setHighlightedNode(step.highlightedNodes[0]);
-        }
-        if (step.newSubGraphNodes) {
-            const newNodes = graph.nodes.filter(node =>
-                step.newSubGraphNodes.includes(node.id)
-            )
-            const newNodeIds = newNodes.map(node => node.id);
-            const newLinks = graph.links.filter(link =>
-                newNodeIds.includes(link.edge[0]) && newNodeIds.includes(link.edge[1])
-            );
-            console.log('new links', newLinks);
+        if (step.graph) {
+            const [nodes, links] = step.graph;
             setGraph({
-                nodes: newNodes,
-                links: newLinks
+                nodes: nodes,
+                links: links
             });
         }
+
+        if (step.highlightedNodes && step.highlightedNodes.length > 0) {
+            setHighlightedNode(step.highlightedNodes[0]);
+        } else {
+            setHighlightedNode(null);
+        }
+
     };
 
     const steps = currentTheoremData.steps.map(step => ({
         content: step.content,
         action: () => executeStepAction(step),
-        redEdges: step.redEdges,
-        blueEdges: step.blueEdges,
+        graph: step.graph,
         highlightedNodes: step.highlightedNodes,
         newSubGraphNodes: step.newSubGraphNodes
     }));
-
-    function areEdgesEqual(e1, e2) {
-        return (
-            (e1[0] === e2[0] && e1[1] === e2[1]) ||
-            (e1[0] === e2[1] && e1[1] === e2[0])
-        );
-    }
-
-    function colorEdges(step) {
-        const redEdges = step?.redEdges || [];
-        console.log('red edges', redEdges);
-        console.log('this', step?.redEdges)
-        const blueEdges = step?.blueEdges || [];
-
-        const newLinks = graph.links.map(link => {
-            const isRed = redEdges.some(edge => areEdgesEqual(edge, link.edge)
-            );
-            const isBlue = blueEdges.some(edge => areEdgesEqual(edge, link.edge)
-            );
-
-            if (isRed) {
-                return { ...link, color: theme.palette.custom.edgeRed };
-            } else if (isBlue) {
-                return { ...link, color: theme.palette.custom.edgeBlue };
-            } else {
-                return { ...link, color: theme.palette.custom.edgeDefault };
-            }
-        })
-        setGraph(prev => ({
-            ...prev,
-            links: newLinks
-        }));
-    }
 
     useEffect(() => {
         const updateDimensions = () => {
