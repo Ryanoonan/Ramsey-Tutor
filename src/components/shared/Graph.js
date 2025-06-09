@@ -10,7 +10,6 @@ function Graph({
     onBackgroundClick,
     width = 800,
     height = 600,
-    lineWidth = 6,
     highlightedNode = null,
     animationDuration = 800,
     shouldAnimate = false
@@ -44,10 +43,11 @@ function Graph({
             const target = nodesToDraw.find(n => n.id === targetId);
 
             if (!source || !target) return;
+            ctx.lineWidth = link.width; // Reset line width for links
             ctx.beginPath();
             ctx.moveTo(source.x, source.y);
             ctx.lineTo(target.x, target.y);
-            ctx.lineWidth = link.lineWidth;
+
             if (link.opacity !== undefined) {
                 ctx.strokeStyle = applyOpacity(link.color || 'black', link.opacity);
             } else {
@@ -135,7 +135,7 @@ function Graph({
             return {
                 ...prevLink,
                 color: targetLink.color,
-                //lineWidth: lerp(prevLink.lineWidth, targetLink.lineWidth, easedProgress),
+                width: lerp(prevLink.width, targetLink.width, easedProgress),
             };
         });
 
