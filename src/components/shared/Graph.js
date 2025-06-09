@@ -159,7 +159,6 @@ function Graph({
         // Continue animation if not complete
         if (progress < 1) {
             animationRef.current = requestAnimationFrame(animationTick);
-            console.log("Current animation progress:", progress);
         } else {
             // Animation complete - update refs to current state
             nodesRef.current = [...nodes];
