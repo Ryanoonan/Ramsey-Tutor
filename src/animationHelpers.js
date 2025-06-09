@@ -31,7 +31,7 @@ export const applyOpacity = (color, opacity) => {
         // use the edge default color instead of hardcoding values
         if (color.startsWith('rgba')) {
             // Replace the existing alpha value
-            return color.replace(/rgba\((.+?),\s*[\d\.]+\)/, `rgba($1, ${opacity})`);
+            return color.replace(/rgba\((.+?),\s*[\d.]+\)/, `rgba($1, ${opacity})`);
         }
         return color.replace('rgb', 'rgba').replace(')', `, ${opacity})`);
     }

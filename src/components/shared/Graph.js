@@ -1,6 +1,6 @@
-import { useRef, useEffect, useCallback, useState } from 'react';
+import { useRef, useEffect, useCallback } from 'react';
 import { useTheme } from '@mui/material/styles';
-import { lerp, lerpColor, easeInOutCubic, applyOpacity } from '../../animationHelpers';
+import { lerp, easeInOutCubic, applyOpacity } from '../../animationHelpers';
 
 function Graph({
     nodes,

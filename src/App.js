@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { ThemeProvider, createTheme } from '@mui/material';
+import { ThemeProvider } from '@mui/material';
 import LandingPage from './components/LandingPage';
 import SandboxMode from './components/sandbox/SandboxMode';
 import TheoremPage from './components/learn/TheoremPage';

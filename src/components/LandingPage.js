@@ -1,4 +1,4 @@
-import { Box, Button, Typography, Container, useTheme } from '@mui/material';
+import { Box, Button, Typography, useTheme } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 function LandingPage() {
