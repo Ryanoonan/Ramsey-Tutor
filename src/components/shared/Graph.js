@@ -10,7 +10,6 @@ function Graph({
     onBackgroundClick,
     width = 800,
     height = 600,
-    nodeRadius = 30,
     lineWidth = 6,
     highlightedNode = null,
     animationDuration = 800,
@@ -30,7 +29,7 @@ function Graph({
     const nodeMapRef = useRef({});
     const linkMapRef = useRef({});
 
-    const drawGraph = useCallback((nodesToDraw, linksToDraw) => {
+    const drawGraph = (nodesToDraw, linksToDraw) => {
         if (!canvasRef.current) return;
         const ctx = canvasRef.current.getContext('2d');
         const nodeBorderColor = theme.palette.custom.nodeBorder;
@@ -48,7 +47,7 @@ function Graph({
             ctx.beginPath();
             ctx.moveTo(source.x, source.y);
             ctx.lineTo(target.x, target.y);
-            ctx.lineWidth = lineWidth;
+            ctx.lineWidth = link.lineWidth;
             if (link.opacity !== undefined) {
                 ctx.strokeStyle = applyOpacity(link.color || 'black', link.opacity);
             } else {
@@ -61,7 +60,7 @@ function Graph({
         nodesToDraw.forEach(node => {
             if (highlightedNode !== null && node.id === highlightedNode) {
                 ctx.beginPath();
-                ctx.arc(node.x, node.y, nodeRadius + 10, 0, 2 * Math.PI);
+                ctx.arc(node.x, node.y, node.radius + 10, 0, 2 * Math.PI);
                 ctx.strokeStyle = '#00ff00';
                 ctx.lineWidth = 3;
                 ctx.stroke();
@@ -69,7 +68,7 @@ function Graph({
 
             // Draw node
             ctx.beginPath();
-            ctx.arc(node.x, node.y, nodeRadius, 0, 2 * Math.PI);
+            ctx.arc(node.x, node.y, node.radius, 0, 2 * Math.PI);
 
             if (node.opacity !== undefined) {
                 ctx.fillStyle = applyOpacity(nodeFillColor, node.opacity);
@@ -83,12 +82,12 @@ function Graph({
             ctx.lineWidth = nodeBoundaryWidth;
             ctx.stroke();
         });
-    }, [width, height, nodeRadius, lineWidth, highlightedNode, theme.palette.custom]);
+    };
 
 
 
     // Animation loop function
-    const animationTick = useCallback((timestamp) => {
+    const animationTick = (timestamp) => {
         if (!startTimeRef.current) startTimeRef.current = timestamp;
         const elapsedTime = timestamp - startTimeRef.current;
         const progress = Math.min(elapsedTime / animationDuration, 1);
@@ -107,7 +106,8 @@ function Graph({
             return {
                 ...prevNode,
                 x: lerp(prevNode.x, targetNode.x, easedProgress),
-                y: lerp(prevNode.y, targetNode.y, easedProgress)
+                y: lerp(prevNode.y, targetNode.y, easedProgress),
+                radius: lerp(prevNode.radius, targetNode.radius, easedProgress),
             };
         });
 
@@ -134,7 +134,8 @@ function Graph({
             }
             return {
                 ...prevLink,
-                color: targetLink.color
+                color: targetLink.color,
+                //lineWidth: lerp(prevLink.lineWidth, targetLink.lineWidth, easedProgress),
             };
         });
 
@@ -158,6 +159,7 @@ function Graph({
         // Continue animation if not complete
         if (progress < 1) {
             animationRef.current = requestAnimationFrame(animationTick);
+            console.log("Current animation progress:", progress);
         } else {
             // Animation complete - update refs to current state
             nodesRef.current = [...nodes];
@@ -171,7 +173,7 @@ function Graph({
                 drawGraph(nodes, links);
             }, 50);
         }
-    }, [nodes, links, animationDuration, drawGraph]);
+    };
 
     useEffect(() => {
         const newNodeMap = {};
@@ -241,7 +243,7 @@ function Graph({
         for (const node of nodes) {
             const dx = node.x - offsetX;
             const dy = node.y - offsetY;
-            if (Math.sqrt(dx * dx + dy * dy) <= nodeRadius) {
+            if (Math.sqrt(dx * dx + dy * dy) <= node.radius) {
                 onNodeClick?.(node);
                 return;
             }
@@ -261,7 +263,7 @@ function Graph({
         }
         // Otherwise background
         onBackgroundClick?.({ x: offsetX, y: offsetY });
-    }, [nodes, links, onNodeClick, onLinkClick, onBackgroundClick, nodeRadius]);
+    }, [nodes, links, onNodeClick, onLinkClick, onBackgroundClick]);
 
     return (
         <div style={{ width, height }}>

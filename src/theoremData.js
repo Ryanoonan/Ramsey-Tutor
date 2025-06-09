@@ -8,7 +8,7 @@ const StepsByPage = [
     {
         theoremName: "R(3) = 6",
         theoremNameSlug: "r3-equals-6",
-        initialGraph: KnGraph(6, "black"),
+        initialGraph: KnGraph({ n: 6, defaultColor: "black" }),
         steps: [
             {
                 content: 'Proof: Choose any node.',
@@ -42,7 +42,7 @@ const StepsByPage = [
     {
         theoremName: "K10 Single Edge",
         theoremNameSlug: "k10-single-edge",
-        initialGraph: KnGraph(10, "black"),
+        initialGraph: KnGraph({ n: 10, defaultColor: "black" }),
         steps: [
             {
                 content: 'Here we color a single edge in the K10 graph.',
@@ -51,19 +51,19 @@ const StepsByPage = [
             },
             {
                 content: 'Looking at a K4 subgraph...',
-                graph: KnGraph({ n: 4, redEdges: [[0, 1]], blueEdges: [] }),
+                graph: KnGraph({ n: 16, redEdges: [[0, 1]], blueEdges: [] }),
                 highlightedNodes: [0, 1, 2, 3],
                 shouldAnimate: true,
             },
             {
                 content: 'Now examining a K6 subgraph...',
-                graph: KnGraph({ n: 6, redEdges: [[0, 1]], blueEdges: [] }),
+                graph: KnGraph({ n: 4, redEdges: [[0, 1]], blueEdges: [] }),
                 highlightedNodes: [0, 1, 2, 3, 4, 5],
                 shouldAnimate: true,
             },
             {
                 content: 'Looking at a different K5 subgraph...',
-                graph: KnGraph({ n: 5, redEdges: [[0, 1]], blueEdges: [[1, 2], [2, 3]] }),
+                graph: KnGraph({ n: 24, redEdges: [[0, 1]], blueEdges: [[1, 2], [2, 3]] }),
                 highlightedNodes: [0, 1, 2, 3, 4],
                 shouldAnimate: true,
             },

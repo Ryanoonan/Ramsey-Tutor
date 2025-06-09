@@ -1,10 +1,32 @@
 
 
-export function KnGraph({ n, defaultColor = "black", redEdges = [], blueEdges = [] }) {
+function calculateNodeRadius(nodeCount) {
+    if (nodeCount <= 10) return 25;
+    if (nodeCount <= 20) return 20;
+    if (nodeCount <= 40) return 15;
+    if (nodeCount <= 60) return 10;
+    return 7;
+}
+
+function calculateLineWidth(nodeCount) {
+    if (nodeCount <= 10) return 5;
+    if (nodeCount <= 20) return 1;
+    if (nodeCount <= 40) return 2;
+    if (nodeCount <= 60) return 1.5;
+    return 1;
+}
+
+export function KnGraph({ n, defaultColor = "black", redEdges = [], blueEdges = [], circleRadius = 150 }) {
+    const nodeRadius = calculateNodeRadius(n);
+    const lineWidth = calculateLineWidth(n);
+
+    const adjustedCircleRadius = n > 15 ? circleRadius + Math.min(100, n * 3) : circleRadius;
+
     const nodes = Array.from({ length: n }, (_, i) => ({
         id: i,
-        x: 300 + 150 * Math.cos((i * 2 * Math.PI) / n),
-        y: 300 + 150 * Math.sin((i * 2 * Math.PI) / n),
+        x: 300 + adjustedCircleRadius * Math.cos((i * 2 * Math.PI) / n),
+        y: 300 + adjustedCircleRadius * Math.sin((i * 2 * Math.PI) / n),
+        radius: nodeRadius,
     }));
 
     const links = [];
@@ -21,7 +43,8 @@ export function KnGraph({ n, defaultColor = "black", redEdges = [], blueEdges = 
 
             links.push({
                 edge: [i, j],
-                color: color
+                color: color,
+                width: lineWidth
             });
         }
     }
