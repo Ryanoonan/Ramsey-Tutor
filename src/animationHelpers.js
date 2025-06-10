@@ -1,23 +1,29 @@
+
+
 export const lerp = (start, end, t) => start + t * (end - start);
 
 export const lerpColor = (color1, color2, t) => {
     const parseColor = (color) => {
-        const match = color.match(/\d+/g);
-        if (match && match.length >= 3) {
-            return match.slice(0, 3).map(Number);
+        const rgbaMatch = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d*\.?\d+))?\)/);
+        if (rgbaMatch) {
+            const r = parseInt(rgbaMatch[1], 10);
+            const g = parseInt(rgbaMatch[2], 10);
+            const b = parseInt(rgbaMatch[3], 10);
+            const a = rgbaMatch[4] !== undefined ? parseFloat(rgbaMatch[4]) : 1.0;
+            return [r, g, b, a];
         }
-        // Default to black if parsing fails
-        return [0, 0, 0];
+        return [0, 0, 0, 1];
     };
 
-    const [r1, g1, b1] = parseColor(color1);
-    const [r2, g2, b2] = parseColor(color2);
+    const [r1, g1, b1, a1] = parseColor(color1);
+    const [r2, g2, b2, a2] = parseColor(color2);
 
     const r = Math.round(lerp(r1, r2, t));
     const g = Math.round(lerp(g1, g2, t));
     const b = Math.round(lerp(b1, b2, t));
+    const a = lerp(a1, a2, t);
 
-    return `rgb(${r}, ${g}, ${b})`;
+    return `rgba(${r}, ${g}, ${b}, ${a})`;
 };
 
 export const easeInOutCubic = (t) => {
