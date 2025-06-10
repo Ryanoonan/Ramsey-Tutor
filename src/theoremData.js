@@ -2,7 +2,7 @@
 
 
 
-import { KnGraph } from "./createGraph";
+import { KnGraph, KInfGraph } from "./createGraph";
 
 const StepsByPage = [
     {
@@ -25,6 +25,12 @@ const StepsByPage = [
             {
                 content: 'For each uncolored edge, coloring this red would lead to a red triangle. Therefore these edges must be blue.',
                 graph: KnGraph({ n: 6, redEdges: [[0, 1], [0, 2], [0, 3]], blueEdges: [[1, 2], [1, 3], [2, 3]] }),
+
+            },
+            {
+                content: 'Duplicate step test',
+                graph: KnGraph({ n: 6, redEdges: [[0, 1], [0, 2], [0, 3]], blueEdges: [[1, 2], [1, 3], [2, 3]] }),
+                shouldAnimate: true,
 
             },
             {
@@ -73,6 +79,23 @@ const StepsByPage = [
                 highlightedNodes: [0, 1, 2, 3, 4, 5, 6, 7],
                 shouldAnimate: true,
             }
+        ]
+    }, {
+        theoremName: "Infinite complete graph test",
+        theoremNameSlug: "infinite-complete-graph-test",
+        initialGraph: KnGraph({ n: 5 }),
+        steps: [
+            {
+                content: "Hello",
+                graph: KInfGraph({ n: 70, blueEdges: [[35, 7], [35, 12], [35, 15], [35, 18], [35, 21], [35, 24], [35, 27], [35, 30], [35, 32], [35, 36], [35, 39], [35, 41], [35, 44], [35, 47], [35, 49], [35, 52], [35, 54], [35, 56], [35, 58], [35, 62]] }),
+                highlightedNodes: [35]
+            },
+            {
+                content: "Hello",
+                graph: KInfGraph({ n: 70, blueEdges: [[35, 7], [35, 12], [35, 15], [35, 18], [35, 21], [35, 24], [35, 27], [35, 30], [35, 32], [35, 36], [35, 39], [35, 41], [35, 44], [35, 47], [35, 49], [35, 52], [35, 54], [35, 56], [35, 58], [35, 62]] }),
+                shouldAnimate: true,
+                highlightedNodes: [35]
+            },
         ]
     }
 ]

@@ -1,6 +1,6 @@
 import { useRef, useEffect, useCallback } from 'react';
 import { useTheme } from '@mui/material/styles';
-import { lerp, easeInOutCubic, applyOpacity } from '../../animationHelpers';
+import { lerp, lerpColor, easeInOutCubic, applyOpacity } from '../../animationHelpers';
 
 function Graph({
     nodes,
@@ -24,7 +24,6 @@ function Graph({
     const prevNodesRef = useRef([]);
     const prevLinksRef = useRef([]);
     const isAnimatingRef = useRef(false);
-    const nodeBoundaryWidth = 5;
     const nodeMapRef = useRef({});
     const linkMapRef = useRef({});
 
@@ -36,37 +35,33 @@ function Graph({
 
         ctx.clearRect(0, 0, width, height);
 
-        // Draw links
+        // draw links
         linksToDraw.forEach(link => {
             const [sourceId, targetId] = link.edge;
             const source = nodesToDraw.find(n => n.id === sourceId);
             const target = nodesToDraw.find(n => n.id === targetId);
 
             if (!source || !target) return;
-            ctx.lineWidth = link.width; // Reset line width for links
+            ctx.lineWidth = link.width;
             ctx.beginPath();
             ctx.moveTo(source.x, source.y);
             ctx.lineTo(target.x, target.y);
 
-            if (link.opacity !== undefined) {
-                ctx.strokeStyle = applyOpacity(link.color || 'black', link.opacity);
-            } else {
-                ctx.strokeStyle = link.color || 'black';
-            }
+            ctx.strokeStyle = link.color || theme.palette.custom.edgeDefault;
 
             ctx.stroke();
         });
 
+        // draw nodes
         nodesToDraw.forEach(node => {
             if (highlightedNode !== null && node.id === highlightedNode) {
                 ctx.beginPath();
-                ctx.arc(node.x, node.y, node.radius + 10, 0, 2 * Math.PI);
+                ctx.arc(node.x, node.y, node.radius * 1.5, 0, 2 * Math.PI);
                 ctx.strokeStyle = '#00ff00';
-                ctx.lineWidth = 3;
+                ctx.lineWidth = node.radius / 3;
                 ctx.stroke();
             }
 
-            // Draw node
             ctx.beginPath();
             ctx.arc(node.x, node.y, node.radius, 0, 2 * Math.PI);
 
@@ -79,7 +74,7 @@ function Graph({
             }
 
             ctx.fill();
-            ctx.lineWidth = nodeBoundaryWidth;
+            ctx.lineWidth = node.radius / 3;
             ctx.stroke();
         });
     };
@@ -128,13 +123,12 @@ function Graph({
             if (!targetLink) {
                 return {
                     ...prevLink,
-                    color: prevLink.color,
-                    opacity: 1 - easedProgress
+                    color: applyOpacity(prevLink.color, 1 - easedProgress),
                 };
             }
             return {
                 ...prevLink,
-                color: targetLink.color,
+                color: lerpColor(targetLink.color, prevLink.color, easedProgress),
                 width: lerp(prevLink.width, targetLink.width, easedProgress),
             };
         });
@@ -147,30 +141,21 @@ function Graph({
             )) {
                 interpolatedLinks.push({
                     ...newLink,
-                    opacity: easedProgress,
-                    color: newLink.color
+                    color: applyOpacity(newLink.color, easedProgress),
                 });
             }
         });
 
-        // Draw the interpolated state
         drawGraph(interpolatedNodes, interpolatedLinks);
 
-        // Continue animation if not complete
         if (progress < 1) {
             animationRef.current = requestAnimationFrame(animationTick);
         } else {
-            // Animation complete - update refs to current state
+            // animation complete
             nodesRef.current = [...nodes];
             linksRef.current = [...links];
             isAnimatingRef.current = false;
-
-            // Wait a small amount of time before drawing the final state
-            // This ensures the fade-out completes visually
-            setTimeout(() => {
-                // Draw the final state without any fade effects
-                drawGraph(nodes, links);
-            }, 50);
+            drawGraph(nodes, links);
         }
     };
 
@@ -215,7 +200,6 @@ function Graph({
             drawGraph(nodes, links);
         }
 
-        // Cleanup function to cancel animation on unmount or when deps change
         return () => {
             if (animationRef.current) {
                 cancelAnimationFrame(animationRef.current);
@@ -223,22 +207,18 @@ function Graph({
         };
     }, [nodes, links, drawGraph, animationTick, shouldAnimate]);
 
-    // Utility for checking distance of point->line
     const pointToLineDistance = (px, py, x1, y1, x2, y2) => {
-        // Based on standard line distance formula
         const numerator = Math.abs((y2 - y1) * px - (x2 - x1) * py + x2 * y1 - y2 * x1);
         const denominator = Math.sqrt((y2 - y1) ** 2 + (x2 - x1) ** 2);
         return denominator ? numerator / denominator : Infinity;
     };
 
-    // Handle clicks for node, link, or background
     const handleCanvasClick = useCallback((e) => {
         if (!canvasRef.current) return;
         const rect = canvasRef.current.getBoundingClientRect();
         const offsetX = e.clientX - rect.left;
         const offsetY = e.clientY - rect.top;
 
-        // Check nodes first
         for (const node of nodes) {
             const dx = node.x - offsetX;
             const dy = node.y - offsetY;
@@ -247,7 +227,6 @@ function Graph({
                 return;
             }
         }
-        // Check links next
         for (const link of links) {
             const [sourceId, targetId] = link.edge;
             const source = nodes.find(n => n.id === sourceId);
@@ -260,7 +239,6 @@ function Graph({
                 return;
             }
         }
-        // Otherwise background
         onBackgroundClick?.({ x: offsetX, y: offsetY });
     }, [nodes, links, onNodeClick, onLinkClick, onBackgroundClick]);
 
