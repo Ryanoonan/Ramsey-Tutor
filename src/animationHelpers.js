@@ -4,11 +4,15 @@ export const lerp = (start, end, t) => start + t * (end - start);
 
 export const lerpColor = (color1, color2, t) => {
     const parseColor = (color) => {
-        const match = color.match(/\d+/g);
-        if (match && match.length >= 4) {
-            return match.slice(0, 4).map(Number);
+        const rgbaMatch = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d*\.?\d+))?\)/);
+        if (rgbaMatch) {
+            const r = parseInt(rgbaMatch[1], 10);
+            const g = parseInt(rgbaMatch[2], 10);
+            const b = parseInt(rgbaMatch[3], 10);
+            const a = rgbaMatch[4] !== undefined ? parseFloat(rgbaMatch[4]) : 1.0;
+            return [r, g, b, a];
         }
-        throw new Error(`Failed to parse color: ${color}`);
+        return [0, 0, 0, 1];
     };
 
     const [r1, g1, b1, a1] = parseColor(color1);
