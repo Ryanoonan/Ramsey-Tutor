@@ -12,7 +12,7 @@ export const lerpColor = (color1, color2, t) => {
             const a = rgbaMatch[4] !== undefined ? parseFloat(rgbaMatch[4]) : 1.0;
             return [r, g, b, a];
         }
-        return [0, 0, 0, 1];
+        throw new Error(`Invalid color format: ${color}`);
     };
 
     const [r1, g1, b1, a1] = parseColor(color1);

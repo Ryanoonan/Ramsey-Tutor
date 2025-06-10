@@ -11,7 +11,7 @@ function Graph({
     width = 800,
     height = 600,
     highlightedNode = null,
-    animationDuration = 800,
+    animationDuration = 2000,
     shouldAnimate = false
 }) {
 
@@ -123,12 +123,12 @@ function Graph({
             if (!targetLink) {
                 return {
                     ...prevLink,
-                    color: applyOpacity(prevLink.color, 1 - easedProgress),
+                    color: lerpColor(prevLink.color, 'rgb(0,0,0,0)', easedProgress),
                 };
             }
             return {
                 ...prevLink,
-                color: lerpColor(targetLink.color, prevLink.color, easedProgress),
+                color: lerpColor(prevLink.color, targetLink.color, easedProgress),
                 width: lerp(prevLink.width, targetLink.width, easedProgress),
             };
         });
@@ -141,7 +141,7 @@ function Graph({
             )) {
                 interpolatedLinks.push({
                     ...newLink,
-                    color: applyOpacity(newLink.color, easedProgress),
+                    color: lerpColor('rgb(0,0,0,0)', newLink.color, easedProgress),
                 });
             }
         });

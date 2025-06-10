@@ -53,15 +53,6 @@ export function KnGraph({ n, defaultColor = "black", redEdges = [], blueEdges = 
     return [nodes, links];
 }
 
-export function scaleFactor(idx, maxIdx) {
-    if (idx < 0.8 * maxIdx) return 1;
-    if (idx < 0.9 * maxIdx) return 0.8;
-    if (idx < 0.95 * maxIdx) return 0.4;
-    if (idx < 0.98 * maxIdx) return 0.2;
-    return 0.1;
-}
-
-
 
 export function GetAngleRatio(idx, maxIdx) {
     const ratio = (idx / maxIdx);
@@ -69,18 +60,20 @@ export function GetAngleRatio(idx, maxIdx) {
     return scaled * 2 * Math.PI;
 }
 
-export function KInfGraph({ n = 50, defaultColor = "black", redEdges = [], blueEdges = [], circleRadius = 150 }) {
+export function KInfGraph({ n = 50, defaultColor = "black", redEdges = [], blueEdges = [], circleRadius = 150, ids = [] }) {
     const baseNodeRadius = calculateNodeRadius(n);
     const lineWidth = calculateLineWidth(n);
+    let newIds = ids
+    if (ids.length === 0) {
+        newIds = [...Array(n).keys()]
+    }
 
     const adjustedCircleRadius = n > 15 ? circleRadius + Math.min(100, n * 3) : circleRadius;
     const nodes = Array.from({ length: n }, (_, i) => {
         const angle = GetAngleRatio(i, n);
         const radius = Math.min(angle, 2 * Math.PI - angle) * baseNodeRadius;
-
-
         return {
-            id: i,
+            id: newIds[i],
             x: 300 + adjustedCircleRadius * Math.cos(angle),
             y: 300 + adjustedCircleRadius * Math.sin(angle),
             radius: radius,
@@ -89,16 +82,13 @@ export function KInfGraph({ n = 50, defaultColor = "black", redEdges = [], blueE
 
     const links = [];
     for (let i = 0; i < n; i++) {
-
         for (let j = i + 1; j < n; j++) {
-            const nodeI = nodes.find(node => node.id === i);
-            const nodeJ = nodes.find(node => node.id === j);
-            // const epsilon = 1;
-            // if (nodeI.radius < epsilon || nodeJ.radius < epsilon) continue;
+            const nodeI = nodes.find(node => node.id === newIds[i]);
+            const nodeJ = nodes.find(node => node.id === newIds[j]);
             const isRedEdge = redEdges.some(edge =>
-                (edge[0] === i && edge[1] === j) || (edge[0] === j && edge[1] === i));
+                (edge[0] === newIds[i] && edge[1] === newIds[j]) || (edge[0] === newIds[j] && edge[1] === newIds[i]));
             const isBlueEdge = blueEdges.some(edge =>
-                (edge[0] === i && edge[1] === j) || (edge[0] === j && edge[1] === i));
+                (edge[0] === newIds[i] && edge[1] === newIds[j]) || (edge[0] === newIds[j] && edge[1] === newIds[i]));
 
             let color = defaultColor;
             if (isRedEdge) color = theme.palette.custom.edgeRed;
@@ -112,9 +102,8 @@ export function KInfGraph({ n = 50, defaultColor = "black", redEdges = [], blueE
                 adjustedLineColor = applyOpacity(color, 0.5);
             }
 
-
             links.push({
-                edge: [i, j],
+                edge: [newIds[i], newIds[j]],
                 color: adjustedLineColor,
                 width: adjustedLineWidth,
             });
@@ -122,5 +111,15 @@ export function KInfGraph({ n = 50, defaultColor = "black", redEdges = [], blueE
     }
     return [nodes, links];
 
+
+}
+
+export function KInfGraphWithKeepIds({ n = 50, defaultColor = "black", redEdges = [], blueEdges = [], circleRadius = 150, idsToKeep = [] }) {
+    const defaultGraph = KInfGraph({ n, defaultColor, redEdges, blueEdges, circleRadius })
+    const oldIds = defaultGraph[0].map((node) => node.id)
+    let newIds = [...Array(26).keys()].map(x => Math.floor((Math.random() + 100) * 10000))
+    newIds.push(...idsToKeep)
+    newIds.push([...Array(n - newIds.length).keys()].map(x => Math.floor((Math.random() + 100) * 10000)))
+    return KInfGraph({ n, defaultColor, redEdges, blueEdges, circleRadius, ids: newIds });
 
 }

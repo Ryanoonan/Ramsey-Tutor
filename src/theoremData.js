@@ -1,8 +1,8 @@
 // import { colorEdges, setHighlightedNode } from './components/learn/TheoremPage';
+import theme from "./theme"
 
 
-
-import { KnGraph, KInfGraph } from "./createGraph";
+import { KnGraph, KInfGraph, KInfGraphWithKeepIds } from "./createGraph";
 
 const StepsByPage = [
     {
@@ -83,16 +83,28 @@ const StepsByPage = [
     }, {
         theoremName: "Infinite complete graph test",
         theoremNameSlug: "infinite-complete-graph-test",
-        initialGraph: KnGraph({ n: 5 }),
+        initialGraph: KInfGraph({ n: 70 }),
         steps: [
             {
-                content: "Hello",
-                graph: KInfGraph({ n: 70, blueEdges: [[35, 7], [35, 12], [35, 15], [35, 18], [35, 21], [35, 24], [35, 27], [35, 30], [35, 32], [35, 36], [35, 39], [35, 41], [35, 44], [35, 47], [35, 49], [35, 52], [35, 54], [35, 56], [35, 58], [35, 62]] }),
+                content: "Select any node.",
+                graph: KInfGraph({ n: 70 }),
                 highlightedNodes: [35]
             },
             {
-                content: "Hello",
+                content: "By infinite pigeonhole principle, at least infinitely many edges must be the same color. WLOG these edges are blue.",
                 graph: KInfGraph({ n: 70, blueEdges: [[35, 7], [35, 12], [35, 15], [35, 18], [35, 21], [35, 24], [35, 27], [35, 30], [35, 32], [35, 36], [35, 39], [35, 41], [35, 44], [35, 47], [35, 49], [35, 52], [35, 54], [35, 56], [35, 58], [35, 62]] }),
+                shouldAnimate: true,
+                highlightedNodes: [35]
+            },
+
+            {
+                content: "Lets take a closer look at the blue edges.",
+                graph: KInfGraphWithKeepIds({
+                    n: 70,
+                    blueEdges: [[35, 7], [35, 12], [35, 15], [35, 18], [35, 21], [35, 24], [35, 27], [35, 30], [35, 32], [35, 36], [35, 39], [35, 41], [35, 44], [35, 47], [35, 49], [35, 52], [35, 54], [35, 56], [35, 58], [35, 62]],
+                    idsToKeep: [7, 12, 15, 18, 21, 24, 27, 30, 32, 35, 36, 39, 41, 44, 47, 49, 52, 54, 56, 58, 62],
+                    defaultColor: theme.palette.custom.defaultColor,
+                }),
                 shouldAnimate: true,
                 highlightedNodes: [35]
             },
