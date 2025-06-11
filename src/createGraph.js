@@ -147,14 +147,81 @@ export class KInfGraph {
 
             }
         });
+        this.nodes = nodes;
+        this.n = n;
+        this.defaultColor = defaultColor;
+        this.redEdges = redEdges;
+        this.blueEdges = blueEdges;
+        this.circleRadius = circleRadius;
+        this.ids = newIds;
+        this.links = this.getNewLinks();
+    }
 
-        let links = createCompleteLinks(nodes, redEdges, blueEdges, defaultColor, lineWidth);
+    colorEdgesFromNode(nodeId, color = theme.palette.custom.edgeDefault) {
+        // Remove any existing edges with this node from both arrays
+        this.redEdges = this.redEdges.filter(edge =>
+            !(edge[0] === nodeId || edge[1] === nodeId));
+        this.blueEdges = this.blueEdges.filter(edge =>
+            !(edge[0] === nodeId || edge[1] === nodeId));
 
+        // Add new edges to the appropriate array based on color
+        if (color === theme.palette.custom.edgeRed) {
+            this.nodes.forEach(node => {
+                if (node.id !== nodeId) {
+                    this.redEdges.push([nodeId, node.id]);
+                }
+            });
+        } else if (color === theme.palette.custom.edgeBlue) {
+            this.nodes.forEach(node => {
+                if (node.id !== nodeId) {
+                    this.blueEdges.push([nodeId, node.id]);
+                }
+            });
+        }
+
+        // Regenerate links
+        this.links = this.getNewLinks();
+    }
+    dropNodeWithId(idToDrop, idToReplaceWith) {
+        const nodeToDrop = this.nodes.find(node => node.id === idToDrop);
+        console.log("Length of nodes before drop:", this.nodes.length);
+        this.nodes = this.nodes.filter(node => node.id !== idToDrop)
+        console.log("Length of nodes after drop:", this.nodes.length);
+        this.nodes.push({
+            id: idToReplaceWith,
+            x: nodeToDrop.x,
+            y: nodeToDrop.y,
+            radius: nodeToDrop.radius
+        });
+    }
+
+    clone() {
+        const newGraph = new KInfGraph({ n: this.n, defaultColor: this.defaultColor, redEdges: this.redEdges, blueEdges: this.blueEdges, circleRadius: this.circleRadius, ids: structuredClone(this.ids) });
+        newGraph.nodes = structuredClone(this.nodes);
+        newGraph.links = structuredClone(this.links);
+        newGraph.ids = structuredClone(this.ids);
+        return newGraph;
+    }
+
+    addNode(node) {
+        if (!this.nodes.some(n => n.id === node.id)) {
+            this.nodes.push(node);
+            this.links = createCompleteLinks(this.nodes, this.redEdges, this.blueEdges, this.defaultColor, calculateLineWidth(this.n));
+        }
+        else {
+            throw new Error(`Node with id ${node.id} already exists in the graph.`);
+        }
+    }
+
+    getNewLinks() {
+        const baseNodeRadius = calculateNodeRadius(this.n);
+        const lineWidth = calculateLineWidth(this.n);
+        const links = createCompleteLinks(this.nodes, this.redEdges, this.blueEdges, this.defaultColor, calculateLineWidth(this.n));
         // Apply opacity and width adjustments specific to KInfGraph
-        links = links.map(link => {
+        return links.map(link => {
             const [id1, id2] = link.edge;
-            const nodeI = nodes.find(node => node.id === id1);
-            const nodeJ = nodes.find(node => node.id === id2);
+            const nodeI = this.nodes.find(node => node.id === id1);
+            const nodeJ = this.nodes.find(node => node.id === id2);
 
             const opacity = Math.min(nodeI.radius, nodeJ.radius) / baseNodeRadius;
             let adjustedLineWidth = link.width;
@@ -176,15 +243,27 @@ export class KInfGraph {
                 width: adjustedLineWidth
             };
         });
-        this.nodes = nodes;
-        this.links = links;
     }
 
-    colorEdgesFromNode(nodeId, color = theme.palette.custom.edgeDefault) {
-        this.links.forEach(link => {
-            if (link.edge.includes(nodeId)) {
-                link.color = color;
+    colorEdges(edges = [], color = theme.palette.custom.edgeDefault) {
+        edges.forEach(edge => {
+            const [id1, id2] = edge;
+
+            this.redEdges = this.redEdges.filter(e => !areEdgesEqual(e, edge));
+            this.blueEdges = this.blueEdges.filter(e => !areEdgesEqual(e, edge));
+
+            if (color === theme.palette.custom.edgeRed) {
+                this.redEdges.push([id1, id2]);
+            } else if (color === theme.palette.custom.edgeBlue) {
+                this.blueEdges.push([id1, id2]);
             }
         });
+        this.links = this.getNewLinks();
     }
+}
+
+
+
+function areEdgesEqual(edge1, edge2) {
+    return (edge1[0] === edge2[0] && edge1[1] === edge2[1]) || (edge1[0] === edge2[1] && edge1[1] === edge2[0]);
 }

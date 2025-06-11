@@ -15,6 +15,42 @@ const graph2b = new KInfGraph({
 })
 let graph3 = graph2b;
 graph3.colorEdgesFromNode(0, theme.palette.custom.edgeBlue);
+let graph4 = graph3.clone();
+graph4.dropNodeWithId(70, 119);
+graph4.addNode({
+    id: 70,
+    x: 300,
+    y: 300,
+    radius: 7
+});
+graph4.links = graph4.getNewLinks();
+let graph5 = graph4.clone();
+graph5.colorEdges([
+    [70, 7], [70, 12], [70, 15], [70, 21], [70, 24], [70, 30], [70, 32],
+    [70, 71], [70, 73], [70, 74], [70, 75], [70, 76], [70, 77], [70, 78], [70, 79], [70, 80],
+    [70, 81], [70, 82], [70, 83], [70, 84], [70, 85], [70, 88], [70, 89],
+    [70, 39], [70, 41], [70, 44], [70, 47], [70, 49]
+], theme.palette.custom.edgeRed);
+console.log("graph4", graph4);
+
+let graph6 = new KInfGraph({
+    n: 70, ids: [0, 70, 7, 12, 15, 18, 21, 24, 27].concat([121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173].concat([30, 32, 36, 39, 41, 44, 47, 49])),
+    blueEdges: [[0, 7], [0, 12], [0, 15], [0, 18], [0, 21], [0, 24], [0, 27], [0, 30], [0, 32], [0, 36], [0, 39], [0, 41], [0, 44], [0, 47], [0, 49], [0, 52], [0, 54], [0, 56], [0, 58], [0, 62]],
+    redEdges: [
+        [70, 7], [70, 12], [70, 15], [70, 21], [70, 24], [70, 30], [70, 32],
+        [70, 71], [70, 73], [70, 74], [70, 75], [70, 76], [70, 77], [70, 78], [70, 79], [70, 80],
+        [70, 81], [70, 82], [70, 83], [70, 84], [70, 85], [70, 88], [70, 89],
+        [70, 39], [70, 41], [70, 44], [70, 47], [70, 49]
+    ]
+});
+console.log("ids of graph6", graph6.nodes.map(node => node.id));
+graph6.colorEdgesFromNode(70, theme.palette.custom.edgeRed);
+console.log("graph6 number of nodes", graph6.nodes.length);
+
+let graph7 = graph6.clone();
+graph7.colorEdgesFromNode(18, theme.palette.custom.edgeBlue);
+let graph8 = graph7.clone();
+graph8.colorEdgesFromNode(30, theme.palette.custom.edgeRed);
 
 
 
@@ -123,7 +159,42 @@ const StepsByPage = [
                 shouldAnimate: true,
                 highlightedNodes: [0, 70]
             },
-
+            {
+                content: "Lets move it to the center",
+                graph: graph4,
+                shouldAnimate: true,
+                highlightedNodes: [0, 70]
+            },
+            {
+                content: "By pigeonhole principle once again, at least infinitely many edges must be the same color. Lets suppose for now these edges are red.",
+                graph: graph5,
+                shouldAnimate: true,
+                highlightedNodes: [0, 70]
+            },
+            {
+                content: "Lets see what happens here...",
+                graph: graph6,
+                shouldAnimate: true,
+                highlightedNodes: [0, 70, 49]
+            },
+            {
+                content: "Now we have a infinite Kn, with one node with only outgoing red edges, and one node with only outgoing blue edges. We can continue this process infinitely.",
+                graph: graph6.clone(),
+                highlightedNodes: [0, 70],
+                shouldAnimate: true,
+            },
+            {
+                content: "For example, our next node has infinitely many outgoing red edges.",
+                graph: graph7,
+                shouldAnimate: true,
+                highlightedNodes: [0, 70, 18]
+            },
+            {
+                content: "Then for example, our next node has infinitely many outgoing blue edges.",
+                graph: graph8,
+                shouldAnimate: true,
+                highlightedNodes: [0, 70, 18, 30]
+            },
 
         ]
     }
