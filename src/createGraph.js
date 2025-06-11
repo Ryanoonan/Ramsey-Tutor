@@ -2,11 +2,9 @@ import { applyOpacity, lerpColor } from "./animationHelpers";
 import theme from './theme';
 
 function calculateNodeRadius(nodeCount) {
-    if (nodeCount <= 10) return 25;
-    if (nodeCount <= 20) return 20;
-    if (nodeCount <= 40) return 15;
-    if (nodeCount <= 60) return 10;
-    return 7;
+    if (nodeCount <= 10) return 50;
+    if (nodeCount <= 20) return 40;
+    return 20;
 }
 
 function calculateLineWidth(nodeCount) {
@@ -90,6 +88,8 @@ export function GetAngle2(x) {
 }
 
 
+
+
 export function KInfGraphWithKeepIds({ originalGraph, n = 50, defaultColor = theme.palette.custom.edgeDefault, redEdges = [], blueEdges = [], circleRadius = 150, idsToKeep = [], centerNodeId, idsToDrop = [] }) {
     const oldIds = originalGraph[0].map((node) => node.id)
     let newIds;
@@ -117,6 +117,11 @@ export function KInfGraphWithKeepIds({ originalGraph, n = 50, defaultColor = the
     return KInfGraph({ n, defaultColor, redEdges, blueEdges, circleRadius, ids: newIds });
 }
 
+export function GetRadiusFromAngle(x) {
+    const distToStart = Math.min(x, 2 * Math.PI - x);
+    const normalizedDist = distToStart / Math.PI;
+    return -1 / (1 + Math.exp(10 * (normalizedDist - 0.5))) + 1;
+}
 
 export class KInfGraph {
     constructor({ n = 50, defaultColor = theme.palette.custom.edgeDefault, redEdges = [], blueEdges = [], circleRadius = 150, ids = [] }) {
@@ -133,7 +138,7 @@ export class KInfGraph {
         const adjustedCircleRadius = n > 15 ? circleRadius + Math.min(100, n * 3) : circleRadius;
         const nodes = Array.from({ length: n }, (_, i) => {
             const angle = GetAngle2(i / n);
-            const radius = Math.min(angle, 2 * Math.PI - angle) / (Math.PI) * baseNodeRadius;
+            const radius = GetRadiusFromAngle(angle) * baseNodeRadius;
             return {
                 id: newIds[i],
                 x: 300 + adjustedCircleRadius * Math.cos(angle),

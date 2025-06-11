@@ -117,6 +117,13 @@ const StepsByPage = [
                 shouldAnimate: true,
                 highlightedNodes: [0]
             },
+            {
+                content: "Select one of these nodes.",
+                graph: graph3,
+                shouldAnimate: true,
+                highlightedNodes: [0, 70]
+            },
+
 
         ]
     }
