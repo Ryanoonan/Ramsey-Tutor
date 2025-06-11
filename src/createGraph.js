@@ -24,10 +24,8 @@ export function createCompleteLinks(nodes, redEdges = [], blueEdges = [], defaul
             const id1 = nodeIds[i];
             const id2 = nodeIds[j];
 
-            const isRedEdge = redEdges.some(edge =>
-                (edge[0] === id1 && edge[1] === id2) || (edge[0] === id2 && edge[1] === id1));
-            const isBlueEdge = blueEdges.some(edge =>
-                (edge[0] === id1 && edge[1] === id2) || (edge[0] === id2 && edge[1] === id1));
+            const isRedEdge = redEdges.some(edge => areEdgesEqual(edge, [id1, id2]));
+            const isBlueEdge = blueEdges.some(edge => areEdgesEqual(edge, [id1, id2]));
 
             let color = defaultColor;
             if (isRedEdge) color = theme.palette.custom.edgeRed;
@@ -63,16 +61,9 @@ export function KnGraph({ n, defaultColor = theme.palette.custom.edgeDefault, re
 }
 
 
-export function GetAngleRatio(idx, maxIdx) {
-    const ratio = (idx / maxIdx);
-    const scaled = 1 / (1 + Math.exp((ratio - 0.5) * 13));
-    const angle = scaled * 2 * Math.PI + Math.PI;
-    return angle > 2 * Math.PI ? angle - 2 * Math.PI : angle;
-}
-
-export function GetAngle2(x) {
+export function IdxRatioToAngle(x) {
     if (x < 0 || x > 1) {
-        throw new Error("GetAngle2: x must be in the range [0, 1]");
+        throw new Error("PosRatioToAngle: x must be in the range [0, 1]");
     }
     let y;
     if (x <= 0.5) {
@@ -82,7 +73,7 @@ export function GetAngle2(x) {
             y = Math.PI * Math.pow(x - 0.5, 4) * 20;
         }
     } else {
-        return Math.PI * 2 - GetAngle2(-x + 1)
+        return Math.PI * 2 - IdxRatioToAngle(-x + 1)
     }
     return y
 }
@@ -137,7 +128,7 @@ export class KInfGraph {
         }
         const adjustedCircleRadius = n > 15 ? circleRadius + Math.min(100, n * 3) : circleRadius;
         const nodes = Array.from({ length: n }, (_, i) => {
-            const angle = GetAngle2(i / n);
+            const angle = IdxRatioToAngle(i / n);
             const radius = GetRadiusFromAngle(angle) * baseNodeRadius;
             return {
                 id: newIds[i],
