@@ -2,9 +2,8 @@ import { applyOpacity, lerpColor } from "./animationHelpers";
 import theme from './theme';
 
 function calculateNodeRadius(nodeCount) {
-    if (nodeCount <= 10) return 50;
-    if (nodeCount <= 20) return 40;
-    return 20;
+    if (nodeCount <= 50) return 30;
+    return 15;
 }
 
 function calculateLineWidth(nodeCount) {
@@ -42,22 +41,43 @@ export function createCompleteLinks(nodes, redEdges = [], blueEdges = [], defaul
     return links;
 }
 
-export function KnGraph({ n, defaultColor = theme.palette.custom.edgeDefault, redEdges = [], blueEdges = [], circleRadius = 150 }) {
-    const nodeRadius = calculateNodeRadius(n);
-    const lineWidth = calculateLineWidth(n);
+// export function KnGraph({ n, defaultColor = theme.palette.custom.edgeDefault, redEdges = [], blueEdges = [], circleRadius = 150 }) {
+//     const nodeRadius = calculateNodeRadius(n);
+//     const lineWidth = calculateLineWidth(n);
 
-    const adjustedCircleRadius = n > 15 ? circleRadius + Math.min(100, n * 3) : circleRadius;
+//     const adjustedCircleRadius = n > 15 ? circleRadius + Math.min(100, n * 3) : circleRadius;
 
-    const nodes = Array.from({ length: n }, (_, i) => ({
-        id: i,
-        x: 300 + adjustedCircleRadius * Math.cos((i * 2 * Math.PI) / n),
-        y: 300 + adjustedCircleRadius * Math.sin((i * 2 * Math.PI) / n),
-        radius: nodeRadius,
-    }));
+//     const nodes = Array.from({ length: n }, (_, i) => ({
+//         id: i,
+//         x: 300 + adjustedCircleRadius * Math.cos((i * 2 * Math.PI) / n),
+//         y: 300 + adjustedCircleRadius * Math.sin((i * 2 * Math.PI) / n),
+//         radius: nodeRadius,
+//     }));
 
-    const links = createCompleteLinks(nodes, redEdges, blueEdges, defaultColor, lineWidth);
+//     const links = createCompleteLinks(nodes, redEdges, blueEdges, defaultColor, lineWidth);
 
-    return [nodes, links];
+//     return [nodes, links];
+// }
+
+export class KnGraph {
+    constructor({ n, defaultColor = theme.palette.custom.edgeDefault, redEdges = [], blueEdges = [], circleRadius = 150 }) {
+        const nodeRadius = calculateNodeRadius(n);
+        const lineWidth = calculateLineWidth(n);
+
+        const adjustedCircleRadius = n > 15 ? circleRadius + Math.min(100, n * 3) : circleRadius;
+
+        const nodes = Array.from({ length: n }, (_, i) => ({
+            id: i,
+            x: 300 + adjustedCircleRadius * Math.cos((i * 2 * Math.PI) / n),
+            y: 300 + adjustedCircleRadius * Math.sin((i * 2 * Math.PI) / n),
+            radius: nodeRadius,
+        }));
+
+        const links = createCompleteLinks(nodes, redEdges, blueEdges, defaultColor, lineWidth);
+
+        this.nodes = nodes;
+        this.links = links;
+    }
 }
 
 
