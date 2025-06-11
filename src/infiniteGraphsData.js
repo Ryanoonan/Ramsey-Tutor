@@ -1,0 +1,54 @@
+import { KInfGraph } from './createGraph.js';
+import theme from './theme.js';
+
+
+const graph1 = new KInfGraph({ n: 70 })
+const graph2 = new KInfGraph({ n: 70, blueEdges: [[0, 7], [0, 12], [0, 15], [0, 18], [0, 21], [0, 24], [0, 27], [0, 30], [0, 32], [0, 36], [0, 39], [0, 41], [0, 44], [0, 47], [0, 49], [0, 52], [0, 54], [0, 56], [0, 58], [0, 62]] });
+let graph3 = new KInfGraph({
+    n: 70, blueEdges: [[0, 7], [0, 12], [0, 15], [0, 18], [0, 21], [0, 24], [0, 27], [0, 30], [0, 32], [0, 36], [0, 39], [0, 41], [0, 44], [0, 47], [0, 49], [0, 52], [0, 54], [0, 56], [0, 58], [0, 62]],
+    ids: [0, 7, 12, 15, 18, 21, 24, 27, 30, 32, 36,].concat(
+        [70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118]
+    ).concat([39, 41, 44, 47, 49, 52, 54, 56, 58, 62,])
+})
+
+graph3.colorEdgesFromNode(0, theme.palette.custom.edgeBlue);
+let graph4 = graph3.clone();
+graph4.dropNodeWithId(70, 119);
+graph4.addNode({
+    id: 70,
+    x: 300,
+    y: 300,
+    radius: 7
+});
+graph4.links = graph4.getNewLinks();
+let graph5 = graph4.clone();
+graph5.colorEdges([
+    [70, 7], [70, 12], [70, 15], [70, 21], [70, 24], [70, 30], [70, 32],
+    [70, 71], [70, 73], [70, 74], [70, 75], [70, 76], [70, 77], [70, 78], [70, 79], [70, 80],
+    [70, 81], [70, 82], [70, 83], [70, 84], [70, 85], [70, 88], [70, 89],
+    [70, 39], [70, 41], [70, 44], [70, 47], [70, 49]
+], theme.palette.custom.edgeRed);
+console.log("graph4", graph4);
+
+let graph6 = new KInfGraph({
+    n: 70, ids: [0, 70, 7, 12, 15, 18, 21, 24, 27].concat([121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173].concat([30, 32, 36, 39, 41, 44, 47, 49])),
+    blueEdges: [[0, 7], [0, 12], [0, 15], [0, 18], [0, 21], [0, 24], [0, 27], [0, 30], [0, 32], [0, 36], [0, 39], [0, 41], [0, 44], [0, 47], [0, 49], [0, 52], [0, 54], [0, 56], [0, 58], [0, 62]],
+    redEdges: [
+        [70, 7], [70, 12], [70, 15], [70, 21], [70, 24], [70, 30], [70, 32],
+        [70, 71], [70, 73], [70, 74], [70, 75], [70, 76], [70, 77], [70, 78], [70, 79], [70, 80],
+        [70, 81], [70, 82], [70, 83], [70, 84], [70, 85], [70, 88], [70, 89],
+        [70, 39], [70, 41], [70, 44], [70, 47], [70, 49]
+    ]
+});
+console.log("ids of graph6", graph6.nodes.map(node => node.id));
+graph6.colorEdgesFromNode(70, theme.palette.custom.edgeRed);
+console.log("graph6 number of nodes", graph6.nodes.length);
+
+let graph7 = graph6.clone();
+graph7.colorEdgesFromNode(18, theme.palette.custom.edgeBlue);
+let graph8 = graph7.clone();
+graph8.colorEdgesFromNode(30, theme.palette.custom.edgeRed);
+
+export const infiniteGraphs = [
+    graph1, graph2, graph3, graph4, graph5, graph6, graph7, graph8
+]
