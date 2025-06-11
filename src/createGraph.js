@@ -1,4 +1,4 @@
-import { applyOpacity } from "./animationHelpers";
+import { applyOpacity, lerpColor } from "./animationHelpers";
 import theme from './theme';
 
 function calculateNodeRadius(nodeCount) {
@@ -17,7 +17,7 @@ function calculateLineWidth(nodeCount) {
     return 1;
 }
 
-export function KnGraph({ n, defaultColor = "black", redEdges = [], blueEdges = [], circleRadius = 150 }) {
+export function KnGraph({ n, defaultColor = theme.palette.custom.edgeDefault, redEdges = [], blueEdges = [], circleRadius = 150 }) {
     const nodeRadius = calculateNodeRadius(n);
     const lineWidth = calculateLineWidth(n);
 
@@ -60,7 +60,7 @@ export function GetAngleRatio(idx, maxIdx) {
     return scaled * 2 * Math.PI;
 }
 
-export function KInfGraph({ n = 50, defaultColor = "black", redEdges = [], blueEdges = [], circleRadius = 150, ids = [] }) {
+export function KInfGraph({ n = 50, defaultColor = theme.palette.custom.edgeDefault, redEdges = [], blueEdges = [], circleRadius = 150, ids = [] }) {
     const baseNodeRadius = calculateNodeRadius(n);
     const lineWidth = calculateLineWidth(n);
     let newIds = ids
@@ -94,12 +94,16 @@ export function KInfGraph({ n = 50, defaultColor = "black", redEdges = [], blueE
             if (isRedEdge) color = theme.palette.custom.edgeRed;
             if (isBlueEdge) color = theme.palette.custom.edgeBlue;
             let opacity = Math.min(nodeI.radius, nodeJ.radius) / baseNodeRadius;
-            color = applyOpacity(color, opacity)
             let adjustedLineWidth = lineWidth;
+
             let adjustedLineColor = color;
+
             if (isRedEdge || isBlueEdge) {
                 adjustedLineWidth = lineWidth * 5;
-                adjustedLineColor = applyOpacity(color, 0.5);
+                adjustedLineColor = lerpColor('rgba(0,0,0,0)', adjustedLineColor, Math.min(opacity * 3, 1));
+            }
+            else {
+                adjustedLineColor = lerpColor('rgba(0,0,0,0)', adjustedLineColor, opacity);
             }
 
             links.push({
@@ -114,12 +118,29 @@ export function KInfGraph({ n = 50, defaultColor = "black", redEdges = [], blueE
 
 }
 
-export function KInfGraphWithKeepIds({ n = 50, defaultColor = "black", redEdges = [], blueEdges = [], circleRadius = 150, idsToKeep = [] }) {
-    const defaultGraph = KInfGraph({ n, defaultColor, redEdges, blueEdges, circleRadius })
-    const oldIds = defaultGraph[0].map((node) => node.id)
-    let newIds = [...Array(26).keys()].map(x => Math.floor((Math.random() + 100) * 10000))
-    newIds.push(...idsToKeep)
-    newIds.push([...Array(n - newIds.length).keys()].map(x => Math.floor((Math.random() + 100) * 10000)))
-    return KInfGraph({ n, defaultColor, redEdges, blueEdges, circleRadius, ids: newIds });
+export function KInfGraphWithKeepIds({ originalGraph, n = 50, defaultColor = theme.palette.custom.edgeDefault, redEdges = [], blueEdges = [], circleRadius = 150, idsToKeep = [], centerNodeId, idsToDrop = [] }) {
+    const oldIds = originalGraph[0].map((node) => node.id)
+    let newIds;
+    if (idsToDrop.length > 0) {
+        newIds = oldIds.filter(id => !idsToDrop.includes(id));
+        newIds.push(Math.floor((Math.random() + 100) * 10000));
+    } else {
+        newIds = [...Array(26).keys()].map(x => Math.floor((Math.random() + 100) * 10000))
+        newIds.push(...idsToKeep)
+        newIds.push([...Array(n - newIds.length).keys()].map(x => Math.floor((Math.random() + 100) * 10000)))
+        // Flatten the newIds array in case there are nested arrays
+        newIds = newIds.flat();
 
+        if (idsToKeep.includes(centerNodeId)) {
+            const centerNodeIndex = newIds.indexOf(centerNodeId);
+
+            for (let i = 0; i < newIds.length; i++) {
+                if (i !== centerNodeIndex) {
+                    blueEdges.push([centerNodeId, newIds[i]]);
+                }
+            }
+        }
+
+    }
+    return KInfGraph({ n, defaultColor, redEdges, blueEdges, circleRadius, ids: newIds });
 }

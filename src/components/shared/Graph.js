@@ -10,8 +10,8 @@ function Graph({
     onBackgroundClick,
     width = 800,
     height = 600,
-    highlightedNode = null,
-    animationDuration = 2000,
+    highlightedNodes = null,
+    animationDuration = 500,
     shouldAnimate = false
 }) {
 
@@ -54,7 +54,7 @@ function Graph({
 
         // draw nodes
         nodesToDraw.forEach(node => {
-            if (highlightedNode !== null && node.id === highlightedNode) {
+            if (highlightedNodes !== null && highlightedNodes.some(id => id === node.id)) {
                 ctx.beginPath();
                 ctx.arc(node.x, node.y, node.radius * 1.5, 0, 2 * Math.PI);
                 ctx.strokeStyle = '#00ff00';

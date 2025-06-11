@@ -11,7 +11,7 @@ function TheoremPage() {
     const navigate = useNavigate();
     const [showProof, setShowProof] = useState(false);
     const [graph, setGraph] = useState({ nodes: [], links: [] });
-    const [highlightedNode, setHighlightedNode] = useState(null);
+    const [highlightedNodes, setHighlightedNodes] = useState(null);
     const [dimensions, setDimensions] = useState({
         width: 600,
         height: 600
@@ -34,9 +34,9 @@ function TheoremPage() {
         }
 
         if (step.highlightedNodes && step.highlightedNodes.length > 0) {
-            setHighlightedNode(step.highlightedNodes[0]);
+            setHighlightedNodes(step.highlightedNodes);
         } else {
-            setHighlightedNode(null);
+            setHighlightedNodes(null);
         }
     };
 
@@ -150,7 +150,7 @@ function TheoremPage() {
                         width={dimensions.width}
                         height={dimensions.height}
                         linkColor={theme.palette.custom.edgeDefault}
-                        highlightedNode={highlightedNode}
+                        highlightedNodes={highlightedNodes}
                         shouldAnimate={shouldAnimate}
                     />
                 </Box>

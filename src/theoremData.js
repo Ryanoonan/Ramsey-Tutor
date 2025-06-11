@@ -8,12 +8,12 @@ const StepsByPage = [
     {
         theoremName: "R(3) = 6",
         theoremNameSlug: "r3-equals-6",
-        initialGraph: KnGraph({ n: 6, defaultColor: "black" }),
+        initialGraph: KnGraph({ n: 6, defaultColor: theme.palette.custom.edgeDefault }),
         steps: [
             {
                 content: 'Proof: Choose any node.',
                 highlightedNodes: [0],
-                graph: KnGraph({ n: 6, defaultColor: "black" }),
+                graph: KnGraph({ n: 6, defaultColor: theme.palette.custom.edgeDefault }),
                 redEdges: [],
                 blueEdges: [],
 
@@ -48,7 +48,7 @@ const StepsByPage = [
     {
         theoremName: "K10 Single Edge",
         theoremNameSlug: "k10-single-edge",
-        initialGraph: KnGraph({ n: 10, defaultColor: "black" }),
+        initialGraph: KnGraph({ n: 10, defaultColor: theme.palette.custom.edgeDefault }),
         steps: [
             {
                 content: 'Here we color a single edge in the K10 graph.',
@@ -98,12 +98,46 @@ const StepsByPage = [
             },
 
             {
-                content: "Lets take a closer look at the blue edges.",
+                content: "Lets take a closer look at the blue edges. We see our original node has infinitely many neighbors connected to it by a blue edge.",
                 graph: KInfGraphWithKeepIds({
+                    originalGraph: KInfGraph({ n: 70 }),
                     n: 70,
                     blueEdges: [[35, 7], [35, 12], [35, 15], [35, 18], [35, 21], [35, 24], [35, 27], [35, 30], [35, 32], [35, 36], [35, 39], [35, 41], [35, 44], [35, 47], [35, 49], [35, 52], [35, 54], [35, 56], [35, 58], [35, 62]],
                     idsToKeep: [7, 12, 15, 18, 21, 24, 27, 30, 32, 35, 36, 39, 41, 44, 47, 49, 52, 54, 56, 58, 62],
-                    defaultColor: theme.palette.custom.defaultColor,
+                    defaultColor: theme.palette.custom.edgeDefault,
+                    centerNodeId: 35
+                }),
+                shouldAnimate: true,
+                highlightedNodes: [35]
+            },
+            {
+                content: "Choose any of these nodes.",
+                graph: KInfGraphWithKeepIds({
+                    originalGraph: KInfGraph({ n: 70 }),
+                    n: 70,
+                    blueEdges: [[35, 7], [35, 12], [35, 15], [35, 18], [35, 21], [35, 24], [35, 27], [35, 30], [35, 32], [35, 36], [35, 39], [35, 41], [35, 44], [35, 47], [35, 49], [35, 52], [35, 54], [35, 56], [35, 58], [35, 62]],
+                    idsToKeep: [7, 12, 15, 18, 21, 24, 27, 30, 32, 35, 36, 39, 41, 44, 47, 49, 52, 54, 56, 58, 62],
+                    defaultColor: theme.palette.custom.edgeDefault,
+                    centerNodeId: 35
+                }),
+                shouldAnimate: true,
+                highlightedNodes: [35, 12]
+            },
+            {
+                content: "Lets move this node to the center.",
+                graph: KInfGraphWithKeepIds({
+                    originalGraph: KInfGraphWithKeepIds({
+                        originalGraph: KInfGraph({ n: 70 }),
+                        n: 70,
+                        blueEdges: [[35, 7], [35, 12], [35, 15], [35, 18], [35, 21], [35, 24], [35, 27], [35, 30], [35, 32], [35, 36], [35, 39], [35, 41], [35, 44], [35, 47], [35, 49], [35, 52], [35, 54], [35, 56], [35, 58], [35, 62]],
+                        idsToKeep: [7, 12, 15, 18, 21, 24, 27, 30, 32, 35, 36, 39, 41, 44, 47, 49, 52, 54, 56, 58, 62],
+                        defaultColor: theme.palette.custom.edgeDefault,
+                        centerNodeId: 35
+                    }),
+                    n: 70,
+                    idsToDrop: [12],
+                    defaultColor: theme.palette.custom.edgeDefault,
+                    centerNodeId: 35
                 }),
                 shouldAnimate: true,
                 highlightedNodes: [35]
@@ -111,5 +145,6 @@ const StepsByPage = [
         ]
     }
 ]
+
 
 export default StepsByPage;
