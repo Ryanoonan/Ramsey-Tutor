@@ -57,7 +57,24 @@ export function KnGraph({ n, defaultColor = theme.palette.custom.edgeDefault, re
 export function GetAngleRatio(idx, maxIdx) {
     const ratio = (idx / maxIdx);
     const scaled = 1 / (1 + Math.exp((ratio - 0.5) * 13));
-    return scaled * 2 * Math.PI;
+    const angle = scaled * 2 * Math.PI + Math.PI;
+    return angle > 2 * Math.PI ? angle - 2 * Math.PI : angle;
+}
+
+export function GetAngle2(x) {
+    let y;
+
+
+    if (x <= 0.5) {
+        if (x < 0.184) {
+            y = Math.PI * (0.1836278408721 - 0.7998964082831 * x) / 0.1836278408721;
+        } else {
+            y = Math.PI * Math.pow(x - 0.5, 4) * 20;
+        }
+    } else {
+        return Math.PI * 2 - GetAngle2(-x + 1)
+    }
+    return y
 }
 
 export function KInfGraph({ n = 50, defaultColor = theme.palette.custom.edgeDefault, redEdges = [], blueEdges = [], circleRadius = 150, ids = [] }) {
@@ -70,13 +87,14 @@ export function KInfGraph({ n = 50, defaultColor = theme.palette.custom.edgeDefa
 
     const adjustedCircleRadius = n > 15 ? circleRadius + Math.min(100, n * 3) : circleRadius;
     const nodes = Array.from({ length: n }, (_, i) => {
-        const angle = GetAngleRatio(i, n);
-        const radius = Math.min(angle, 2 * Math.PI - angle) * baseNodeRadius;
+        const angle = GetAngle2(i / n);
+        const radius = Math.min(angle, 2 * Math.PI - angle) / (Math.PI) * baseNodeRadius;
         return {
             id: newIds[i],
             x: 300 + adjustedCircleRadius * Math.cos(angle),
             y: 300 + adjustedCircleRadius * Math.sin(angle),
             radius: radius,
+
         }
     });
 
@@ -144,3 +162,4 @@ export function KInfGraphWithKeepIds({ originalGraph, n = 50, defaultColor = the
     }
     return KInfGraph({ n, defaultColor, redEdges, blueEdges, circleRadius, ids: newIds });
 }
+

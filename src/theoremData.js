@@ -83,12 +83,13 @@ const StepsByPage = [
     }, {
         theoremName: "Infinite complete graph test",
         theoremNameSlug: "infinite-complete-graph-test",
-        initialGraph: KInfGraph({ n: 70 }),
+        initialGraph: KInfGraph({ n: 30 }),
         steps: [
             {
                 content: "Select any node.",
-                graph: KInfGraph({ n: 70 }),
-                highlightedNodes: [35]
+                graph: KInfGraph({ n: 100 }),
+                highlightedNodes: [35],
+                shouldAnimate: true,
             },
             {
                 content: "By infinite pigeonhole principle, at least infinitely many edges must be the same color. WLOG these edges are blue.",
