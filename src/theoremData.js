@@ -4,6 +4,20 @@ import theme from "./theme"
 
 import { KnGraph, KInfGraph, KInfGraphWithKeepIds } from "./createGraph";
 
+// infinite graph declarations
+const graph1 = new KInfGraph({ n: 70 })
+const graph2 = new KInfGraph({ n: 70, blueEdges: [[0, 7], [0, 12], [0, 15], [0, 18], [0, 21], [0, 24], [0, 27], [0, 30], [0, 32], [0, 36], [0, 39], [0, 41], [0, 44], [0, 47], [0, 49], [0, 52], [0, 54], [0, 56], [0, 58], [0, 62]] });
+const graph2b = new KInfGraph({
+    n: 70, blueEdges: [[0, 7], [0, 12], [0, 15], [0, 18], [0, 21], [0, 24], [0, 27], [0, 30], [0, 32], [0, 36], [0, 39], [0, 41], [0, 44], [0, 47], [0, 49], [0, 52], [0, 54], [0, 56], [0, 58], [0, 62]],
+    ids: [0, 7, 12, 15, 18, 21, 24, 27, 30, 32, 36,].concat(
+        [70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118]
+    ).concat([39, 41, 44, 47, 49, 52, 54, 56, 58, 62,])
+})
+let graph3 = graph2b;
+graph3.colorEdgesFromNode(0, theme.palette.custom.edgeBlue);
+
+
+
 const StepsByPage = [
     {
         theoremName: "R(3) = 6",
@@ -83,69 +97,33 @@ const StepsByPage = [
     }, {
         theoremName: "Infinite complete graph test",
         theoremNameSlug: "infinite-complete-graph-test",
-        initialGraph: KInfGraph({ n: 30 }),
+        initialGraph: new KInfGraph({ n: 70 }),
         steps: [
             {
                 content: "Select any node.",
-                graph: KInfGraph({ n: 100 }),
-                highlightedNodes: [35],
+                graph: graph1,
+                highlightedNodes: [0],
                 shouldAnimate: true,
             },
             {
                 content: "By infinite pigeonhole principle, at least infinitely many edges must be the same color. WLOG these edges are blue.",
-                graph: KInfGraph({ n: 70, blueEdges: [[35, 7], [35, 12], [35, 15], [35, 18], [35, 21], [35, 24], [35, 27], [35, 30], [35, 32], [35, 36], [35, 39], [35, 41], [35, 44], [35, 47], [35, 49], [35, 52], [35, 54], [35, 56], [35, 58], [35, 62]] }),
+                graph: graph2,
                 shouldAnimate: true,
-                highlightedNodes: [35]
+                highlightedNodes: [0]
+            },
+            {
+                content: "Lets take a closer look at the blue edges.",
+                graph: graph3,
+                shouldAnimate: true,
+                highlightedNodes: [0]
             },
 
-            {
-                content: "Lets take a closer look at the blue edges. We see our original node has infinitely many neighbors connected to it by a blue edge.",
-                graph: KInfGraphWithKeepIds({
-                    originalGraph: KInfGraph({ n: 70 }),
-                    n: 70,
-                    blueEdges: [[35, 7], [35, 12], [35, 15], [35, 18], [35, 21], [35, 24], [35, 27], [35, 30], [35, 32], [35, 36], [35, 39], [35, 41], [35, 44], [35, 47], [35, 49], [35, 52], [35, 54], [35, 56], [35, 58], [35, 62]],
-                    idsToKeep: [7, 12, 15, 18, 21, 24, 27, 30, 32, 35, 36, 39, 41, 44, 47, 49, 52, 54, 56, 58, 62],
-                    defaultColor: theme.palette.custom.edgeDefault,
-                    centerNodeId: 35
-                }),
-                shouldAnimate: true,
-                highlightedNodes: [35]
-            },
-            {
-                content: "Choose any of these nodes.",
-                graph: KInfGraphWithKeepIds({
-                    originalGraph: KInfGraph({ n: 70 }),
-                    n: 70,
-                    blueEdges: [[35, 7], [35, 12], [35, 15], [35, 18], [35, 21], [35, 24], [35, 27], [35, 30], [35, 32], [35, 36], [35, 39], [35, 41], [35, 44], [35, 47], [35, 49], [35, 52], [35, 54], [35, 56], [35, 58], [35, 62]],
-                    idsToKeep: [7, 12, 15, 18, 21, 24, 27, 30, 32, 35, 36, 39, 41, 44, 47, 49, 52, 54, 56, 58, 62],
-                    defaultColor: theme.palette.custom.edgeDefault,
-                    centerNodeId: 35
-                }),
-                shouldAnimate: true,
-                highlightedNodes: [35, 12]
-            },
-            {
-                content: "Lets move this node to the center.",
-                graph: KInfGraphWithKeepIds({
-                    originalGraph: KInfGraphWithKeepIds({
-                        originalGraph: KInfGraph({ n: 70 }),
-                        n: 70,
-                        blueEdges: [[35, 7], [35, 12], [35, 15], [35, 18], [35, 21], [35, 24], [35, 27], [35, 30], [35, 32], [35, 36], [35, 39], [35, 41], [35, 44], [35, 47], [35, 49], [35, 52], [35, 54], [35, 56], [35, 58], [35, 62]],
-                        idsToKeep: [7, 12, 15, 18, 21, 24, 27, 30, 32, 35, 36, 39, 41, 44, 47, 49, 52, 54, 56, 58, 62],
-                        defaultColor: theme.palette.custom.edgeDefault,
-                        centerNodeId: 35
-                    }),
-                    n: 70,
-                    idsToDrop: [12],
-                    defaultColor: theme.palette.custom.edgeDefault,
-                    centerNodeId: 35
-                }),
-                shouldAnimate: true,
-                highlightedNodes: [35]
-            },
         ]
     }
 ]
+
+
+
 
 
 export default StepsByPage;
