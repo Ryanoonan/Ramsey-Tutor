@@ -119,12 +119,10 @@ export class KInfGraph {
         const baseNodeRadius = calculateNodeRadius(n);
         const lineWidth = calculateLineWidth(n);
         let newIds = ids
-        console.log("newIds", newIds);
         if (ids.length === 0) {
             newIds = [...Array(n).keys()]
         }
         else {
-            console.log("Lenght of ids", ids.length);
         }
         const adjustedCircleRadius = n > 15 ? circleRadius + Math.min(100, n * 3) : circleRadius;
         const nodes = Array.from({ length: n }, (_, i) => {
@@ -175,9 +173,7 @@ export class KInfGraph {
     }
     dropNodeWithId(idToDrop, idToReplaceWith) {
         const nodeToDrop = this.nodes.find(node => node.id === idToDrop);
-        console.log("Length of nodes before drop:", this.nodes.length);
         this.nodes = this.nodes.filter(node => node.id !== idToDrop)
-        console.log("Length of nodes after drop:", this.nodes.length);
         this.nodes.push({
             id: idToReplaceWith,
             x: nodeToDrop.x,

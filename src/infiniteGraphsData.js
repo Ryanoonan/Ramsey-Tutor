@@ -28,7 +28,6 @@ graph5.colorEdges([
     [70, 81], [70, 82], [70, 83], [70, 84], [70, 85], [70, 88], [70, 89],
     [70, 39], [70, 41], [70, 44], [70, 47], [70, 49]
 ], theme.palette.custom.edgeRed);
-console.log("graph4", graph4);
 
 let graph6 = new KInfGraph({
     n: 70, ids: [0, 70, 7, 12, 15, 18, 21, 24, 27].concat([121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173].concat([30, 32, 36, 39, 41, 44, 47, 49])),
@@ -40,9 +39,7 @@ let graph6 = new KInfGraph({
         [70, 39], [70, 41], [70, 44], [70, 47], [70, 49]
     ]
 });
-console.log("ids of graph6", graph6.nodes.map(node => node.id));
 graph6.colorEdgesFromNode(70, theme.palette.custom.edgeRed);
-console.log("graph6 number of nodes", graph6.nodes.length);
 
 let graph7 = graph6.clone();
 graph7.colorEdgesFromNode(18, theme.palette.custom.edgeBlue);
