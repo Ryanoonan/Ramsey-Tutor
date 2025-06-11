@@ -1,8 +1,8 @@
-// import { colorEdges, setHighlightedNode } from './components/learn/TheoremPage';
 import theme from "./theme"
 
 
-import { KnGraph, KInfGraph, KInfGraphWithKeepIds } from "./createGraph";
+import { KnGraph } from "./createGraph";
+import { infiniteGraphs } from "./infiniteGraphsData";
 
 const StepsByPage = [
     {
@@ -83,68 +83,75 @@ const StepsByPage = [
     }, {
         theoremName: "Infinite complete graph test",
         theoremNameSlug: "infinite-complete-graph-test",
-        initialGraph: KInfGraph({ n: 70 }),
+        initialGraph: infiniteGraphs[0],
         steps: [
             {
                 content: "Select any node.",
-                graph: KInfGraph({ n: 70 }),
-                highlightedNodes: [35]
+                graph: infiniteGraphs[0],
+                highlightedNodes: [0],
+                shouldAnimate: true,
             },
             {
                 content: "By infinite pigeonhole principle, at least infinitely many edges must be the same color. WLOG these edges are blue.",
-                graph: KInfGraph({ n: 70, blueEdges: [[35, 7], [35, 12], [35, 15], [35, 18], [35, 21], [35, 24], [35, 27], [35, 30], [35, 32], [35, 36], [35, 39], [35, 41], [35, 44], [35, 47], [35, 49], [35, 52], [35, 54], [35, 56], [35, 58], [35, 62]] }),
+                graph: infiniteGraphs[1],
                 shouldAnimate: true,
-                highlightedNodes: [35]
+                highlightedNodes: [0]
+            },
+            {
+                content: "Lets take a closer look at the blue edges.",
+                graph: infiniteGraphs[2],
+                shouldAnimate: true,
+                highlightedNodes: [0]
+            },
+            {
+                content: "Select one of these nodes.",
+                graph: infiniteGraphs[2],
+                shouldAnimate: true,
+                highlightedNodes: [0, 70]
+            },
+            {
+                content: "Lets move it to the center",
+                graph: infiniteGraphs[3],
+                shouldAnimate: true,
+                highlightedNodes: [0, 70]
+            },
+            {
+                content: "By pigeonhole principle once again, at least infinitely many edges must be the same color. Lets suppose for now these edges are red.",
+                graph: infiniteGraphs[4],
+                shouldAnimate: true,
+                highlightedNodes: [0, 70]
+            },
+            {
+                content: "Lets see what happens here...",
+                graph: infiniteGraphs[5],
+                shouldAnimate: true,
+                highlightedNodes: [0, 70, 49]
+            },
+            {
+                content: "Now we have a infinite Kn, with one node with only outgoing red edges, and one node with only outgoing blue edges. We can continue this process infinitely.",
+                graph: infiniteGraphs[5],
+                highlightedNodes: [0, 70],
+                shouldAnimate: true,
+            },
+            {
+                content: "For example, our next node has infinitely many outgoing red edges.",
+                graph: infiniteGraphs[6],
+                shouldAnimate: true,
+                highlightedNodes: [0, 70, 18]
+            },
+            {
+                content: "Then for example, our next node has infinitely many outgoing blue edges.",
+                graph: infiniteGraphs[7],
+                shouldAnimate: true,
+                highlightedNodes: [0, 70, 18, 30]
             },
 
-            {
-                content: "Lets take a closer look at the blue edges. We see our original node has infinitely many neighbors connected to it by a blue edge.",
-                graph: KInfGraphWithKeepIds({
-                    originalGraph: KInfGraph({ n: 70 }),
-                    n: 70,
-                    blueEdges: [[35, 7], [35, 12], [35, 15], [35, 18], [35, 21], [35, 24], [35, 27], [35, 30], [35, 32], [35, 36], [35, 39], [35, 41], [35, 44], [35, 47], [35, 49], [35, 52], [35, 54], [35, 56], [35, 58], [35, 62]],
-                    idsToKeep: [7, 12, 15, 18, 21, 24, 27, 30, 32, 35, 36, 39, 41, 44, 47, 49, 52, 54, 56, 58, 62],
-                    defaultColor: theme.palette.custom.edgeDefault,
-                    centerNodeId: 35
-                }),
-                shouldAnimate: true,
-                highlightedNodes: [35]
-            },
-            {
-                content: "Choose any of these nodes.",
-                graph: KInfGraphWithKeepIds({
-                    originalGraph: KInfGraph({ n: 70 }),
-                    n: 70,
-                    blueEdges: [[35, 7], [35, 12], [35, 15], [35, 18], [35, 21], [35, 24], [35, 27], [35, 30], [35, 32], [35, 36], [35, 39], [35, 41], [35, 44], [35, 47], [35, 49], [35, 52], [35, 54], [35, 56], [35, 58], [35, 62]],
-                    idsToKeep: [7, 12, 15, 18, 21, 24, 27, 30, 32, 35, 36, 39, 41, 44, 47, 49, 52, 54, 56, 58, 62],
-                    defaultColor: theme.palette.custom.edgeDefault,
-                    centerNodeId: 35
-                }),
-                shouldAnimate: true,
-                highlightedNodes: [35, 12]
-            },
-            {
-                content: "Lets move this node to the center.",
-                graph: KInfGraphWithKeepIds({
-                    originalGraph: KInfGraphWithKeepIds({
-                        originalGraph: KInfGraph({ n: 70 }),
-                        n: 70,
-                        blueEdges: [[35, 7], [35, 12], [35, 15], [35, 18], [35, 21], [35, 24], [35, 27], [35, 30], [35, 32], [35, 36], [35, 39], [35, 41], [35, 44], [35, 47], [35, 49], [35, 52], [35, 54], [35, 56], [35, 58], [35, 62]],
-                        idsToKeep: [7, 12, 15, 18, 21, 24, 27, 30, 32, 35, 36, 39, 41, 44, 47, 49, 52, 54, 56, 58, 62],
-                        defaultColor: theme.palette.custom.edgeDefault,
-                        centerNodeId: 35
-                    }),
-                    n: 70,
-                    idsToDrop: [12],
-                    defaultColor: theme.palette.custom.edgeDefault,
-                    centerNodeId: 35
-                }),
-                shouldAnimate: true,
-                highlightedNodes: [35]
-            },
         ]
     }
 ]
+
+
+
 
 
 export default StepsByPage;

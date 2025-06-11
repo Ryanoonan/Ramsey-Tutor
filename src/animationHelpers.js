@@ -21,7 +21,11 @@ export const lerpColor = (color1, color2, t) => {
     const r = Math.round(lerp(r1, r2, t));
     const g = Math.round(lerp(g1, g2, t));
     const b = Math.round(lerp(b1, b2, t));
-    const a = lerp(a1, a2, t);
+    let a = lerp(a1, a2, t);
+
+    if (a < 0.01) {
+        a = 0; // prevent scientific notation for very small alpha values
+    }
 
     return `rgba(${r}, ${g}, ${b}, ${a})`;
 };

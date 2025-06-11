@@ -26,7 +26,8 @@ function TheoremPage() {
 
     const executeStepAction = (step) => {
         if (step.graph) {
-            const [nodes, links] = step.graph;
+            const nodes = step.graph.nodes;
+            const links = step.graph.links;
             setGraph({
                 nodes: nodes,
                 links: links
@@ -67,7 +68,8 @@ function TheoremPage() {
     }, []);
 
     const initializeGraph = () => {
-        const [initNodes, initLinks] = currentTheoremData.initialGraph;
+        const initNodes = currentTheoremData.initialGraph.nodes;
+        const initLinks = currentTheoremData.initialGraph.links;
         setGraph({
             nodes: initNodes,
             links: initLinks
