@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Box, Button, Typography, Paper, Toolbar, useTheme } from '@mui/material';
+import { Box, Button, Typography, Paper, useTheme } from '@mui/material';
 import Graph from '../shared/Graph';
 import StepsByPage from '../../theoremData';
 import { useParams } from 'react-router-dom'
@@ -9,7 +8,6 @@ import AppBar from '../shared/AppBar';
 function TheoremPage() {
     const { slug } = useParams();
     const theme = useTheme();
-    const navigate = useNavigate();
     const [showProof, setShowProof] = useState(false);
     const [graph, setGraph] = useState({ nodes: [], links: [] });
     const [highlightedNodes, setHighlightedNodes] = useState(null);
@@ -68,18 +66,18 @@ function TheoremPage() {
         return () => window.removeEventListener('resize', updateDimensions);
     }, []);
 
-    const initializeGraph = () => {
-        const initNodes = currentTheoremData.initialGraph.nodes;
-        const initLinks = currentTheoremData.initialGraph.links;
-        setGraph({
-            nodes: initNodes,
-            links: initLinks
-        });
-    };
-
     useEffect(() => {
+        const initializeGraph = () => {
+            const initNodes = currentTheoremData.initialGraph.nodes;
+            const initLinks = currentTheoremData.initialGraph.links;
+            setGraph({
+                nodes: initNodes,
+                links: initLinks
+            });
+        };
+
         initializeGraph();
-    }, []);
+    }, [currentTheoremData.initialGraph]);
 
     const handleNext = () => {
         if (nextStepIndex >= steps.length) return;

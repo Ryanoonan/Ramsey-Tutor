@@ -1,5 +1,5 @@
 
-import { Box, Typography, Container, Toolbar, Button } from '@mui/material';
+import { Box, Typography, Container } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import 'katex/dist/katex.min.css';
 import { InlineMath, BlockMath } from 'react-katex';

@@ -5,7 +5,7 @@
 import { AppBar as MuiAppBar, Toolbar, Box, Button, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
-import { InlineMath, BlockMath } from 'react-katex';
+import { InlineMath } from 'react-katex';
 
 function AppBar({ returnPath, titleText, formatMath }) {
     const theme = useTheme();
