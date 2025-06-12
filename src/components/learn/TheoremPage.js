@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Button, Typography, Paper, AppBar, Toolbar, useTheme } from '@mui/material';
+import { Box, Button, Typography, Paper, Toolbar, useTheme } from '@mui/material';
 import Graph from '../shared/Graph';
 import StepsByPage from '../../theoremData';
 import { useParams } from 'react-router-dom'
+import AppBar from '../shared/AppBar';
 
 function TheoremPage() {
     const { slug } = useParams();
@@ -123,120 +124,115 @@ function TheoremPage() {
     };
 
     return (
-        <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-            <AppBar position="static" sx={{ bgcolor: theme.palette.background.paper }}>
-                <Toolbar>
-                    <Button color="inherit" onClick={() => navigate('/')} sx={{ mr: 2 }}>
-                        Back to Menu
-                    </Button>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        {currentTheoremData.theoremName}
-                    </Typography>
-                </Toolbar>
-            </AppBar>
+        <>
+            <AppBar returnPath="/learnmenu" titleText={currentTheoremData.theoremName} formatMath={true} />
+            <Box sx={{ height: '20px' }} />
+            <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
 
-            <Box sx={{
-                flex: 1,
-                display: 'flex',
-                gap: 2,
-                p: 2,
-                backgroundColor: theme.palette.background.default
-            }}>
-                <Box id="learn-graph-container" sx={{
-                    flex: 1,
-                    minHeight: '600px'
-                }}>
-                    <Graph
-                        nodes={graph.nodes}
-                        links={graph.links}
-                        width={dimensions.width}
-                        height={dimensions.height}
-                        linkColor={theme.palette.custom.edgeDefault}
-                        highlightedNodes={highlightedNodes}
-                        shouldAnimate={shouldAnimate}
-                    />
-                </Box>
 
-                <Paper sx={{
+                <Box sx={{
                     flex: 1,
-                    p: 2,
                     display: 'flex',
-                    flexDirection: 'column',
                     gap: 2,
-                    bgcolor: theme.palette.background.paper,
-                    color: theme.palette.text.primary,
-                    boxShadow: 'none',
-                    borderRadius: 1
+                    p: 2,
+                    backgroundColor: theme.palette.background.default
                 }}>
-                    <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
-                        <Typography
-                            variant="h5"
-                            sx={{
-                                textAlign: 'left',
-                                fontSize: '2rem',
-                                fontFamily: 'Helvetica',
-                                mb: 2
-                            }}
-                        >
-                            {currentTheoremData.theoremName}
-                        </Typography>
-
-                        {!showProof ? (
-                            <Button
-                                variant="contained"
-                                onClick={() => {
-                                    setShowProof(true);
-                                    const firstStep = steps[0];
-                                    if (firstStep.action) {
-                                        firstStep.action();
-                                    }
-                                    setVisibleSteps([firstStep]);
-                                    setNextStepIndex(1);
-                                }}
-                                sx={{ alignSelf: 'flex-start' }}
-                            >
-                                Show Proof
-                            </Button>
-                        ) : (
-                            <>
-                                {visibleSteps.map((step, idx) => (
-                                    <Typography
-                                        key={idx}
-                                        variant="body1"
-                                        sx={{
-                                            textAlign: 'left',
-                                            fontSize: '1.8rem',
-                                            fontFamily: 'Helvetica',
-                                            mb: idx < visibleSteps.length - 1 ? 2 : 0
-                                        }}
-                                    >
-                                        {step.content}
-                                    </Typography>
-                                ))}
-                            </>
-                        )}
+                    <Box id="learn-graph-container" sx={{
+                        flex: 1,
+                        minHeight: '600px'
+                    }}>
+                        <Graph
+                            nodes={graph.nodes}
+                            links={graph.links}
+                            width={dimensions.width}
+                            height={dimensions.height}
+                            linkColor={theme.palette.custom.edgeDefault}
+                            highlightedNodes={highlightedNodes}
+                            shouldAnimate={shouldAnimate}
+                        />
                     </Box>
 
-                    {showProof && (
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
-                            <Button
-                                onClick={handlePrevious}
-                                disabled={nextStepIndex === 1}
+                    <Paper sx={{
+                        flex: 1,
+                        p: 2,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 2,
+                        bgcolor: theme.palette.background.paper,
+                        color: theme.palette.text.primary,
+                        boxShadow: 'none',
+                        borderRadius: 1
+                    }}>
+                        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
+                            <Typography
+                                variant="h5"
+                                sx={{
+                                    textAlign: 'left',
+                                    fontSize: '2rem',
+                                    fontFamily: 'Helvetica',
+                                    mb: 2
+                                }}
                             >
-                                Previous
-                            </Button>
-                            <Button
-                                variant="contained"
-                                onClick={handleNext}
-                                disabled={nextStepIndex >= steps.length}
-                            >
-                                Next
-                            </Button>
+                                {currentTheoremData.theoremName}
+                            </Typography>
+
+                            {!showProof ? (
+                                <Button
+                                    variant="contained"
+                                    onClick={() => {
+                                        setShowProof(true);
+                                        const firstStep = steps[0];
+                                        if (firstStep.action) {
+                                            firstStep.action();
+                                        }
+                                        setVisibleSteps([firstStep]);
+                                        setNextStepIndex(1);
+                                    }}
+                                    sx={{ alignSelf: 'flex-start' }}
+                                >
+                                    Show Proof
+                                </Button>
+                            ) : (
+                                <>
+                                    {visibleSteps.map((step, idx) => (
+                                        <Typography
+                                            key={idx}
+                                            variant="body1"
+                                            sx={{
+                                                textAlign: 'left',
+                                                fontSize: '1.8rem',
+                                                fontFamily: 'Helvetica',
+                                                mb: idx < visibleSteps.length - 1 ? 2 : 0
+                                            }}
+                                        >
+                                            {step.content}
+                                        </Typography>
+                                    ))}
+                                </>
+                            )}
                         </Box>
-                    )}
-                </Paper>
+
+                        {showProof && (
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
+                                <Button
+                                    onClick={handlePrevious}
+                                    disabled={nextStepIndex === 1}
+                                >
+                                    Previous
+                                </Button>
+                                <Button
+                                    variant="contained"
+                                    onClick={handleNext}
+                                    disabled={nextStepIndex >= steps.length}
+                                >
+                                    Next
+                                </Button>
+                            </Box>
+                        )}
+                    </Paper>
+                </Box >
             </Box >
-        </Box >
+        </>
     );
 }
 

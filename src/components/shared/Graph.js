@@ -207,41 +207,6 @@ function Graph({
         };
     }, [nodes, links, drawGraph, animationTick, shouldAnimate]);
 
-    const pointToLineDistance = (px, py, x1, y1, x2, y2) => {
-        const numerator = Math.abs((y2 - y1) * px - (x2 - x1) * py + x2 * y1 - y2 * x1);
-        const denominator = Math.sqrt((y2 - y1) ** 2 + (x2 - x1) ** 2);
-        return denominator ? numerator / denominator : Infinity;
-    };
-
-    const handleCanvasClick = useCallback((e) => {
-        if (!canvasRef.current) return;
-        const rect = canvasRef.current.getBoundingClientRect();
-        const offsetX = e.clientX - rect.left;
-        const offsetY = e.clientY - rect.top;
-
-        for (const node of nodes) {
-            const dx = node.x - offsetX;
-            const dy = node.y - offsetY;
-            if (Math.sqrt(dx * dx + dy * dy) <= node.radius) {
-                onNodeClick?.(node);
-                return;
-            }
-        }
-        for (const link of links) {
-            const [sourceId, targetId] = link.edge;
-            const source = nodes.find(n => n.id === sourceId);
-            const target = nodes.find(n => n.id === targetId);
-
-            if (!source || !target) continue;
-            const dist = pointToLineDistance(offsetX, offsetY, source.x, source.y, target.x, target.y);
-            if (dist < 5) {
-                onLinkClick?.(link);
-                return;
-            }
-        }
-        onBackgroundClick?.({ x: offsetX, y: offsetY });
-    }, [nodes, links, onNodeClick, onLinkClick, onBackgroundClick]);
-
     return (
         <div style={{ width, height }}>
             <canvas
@@ -249,7 +214,6 @@ function Graph({
                 width={width}
                 height={height}
                 style={{ cursor: 'pointer' }}
-                onClick={handleCanvasClick}
             />
         </div>
     );

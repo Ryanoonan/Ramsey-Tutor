@@ -11,7 +11,7 @@ function LandingPage() {
             width: '100%',
             height: '100%',
             overflow: 'hidden',
-            backgroundColor: theme.palette.background.default,
+            backgroundColor: theme.palette.background,
             color: theme.palette.text.primary,
             display: 'flex',
             alignItems: 'center',
@@ -37,22 +37,22 @@ function LandingPage() {
                     <Button
                         variant="contained"
                         size="large"
-                        onClick={() => navigate('/sandbox')}
-                        sx={{ minWidth: 200 }}
-                    >
-                        Sandbox
-                    </Button>
-                    <Button
-                        variant="contained"
-                        size="large"
                         onClick={() => navigate('/learnmenu')}
                         sx={{ minWidth: 200 }}
                     >
                         Learn
                     </Button>
+                    <Button
+                        variant="contained"
+                        size="large"
+                        onClick={() => navigate('/background')}
+                        sx={{ minWidth: 200 }}
+                    >
+                        Background
+                    </Button>
                 </Box>
             </Box>
-        </Box>
+        </Box >
     );
 }
 

@@ -1,7 +1,14 @@
-import { Box, Typography, Container } from '@mui/material';
+import { Box, Typography, Container, Button } from '@mui/material';
 import StepsByPage from '../../theoremData';
+import { useNavigate } from 'react-router-dom';
+import { useTheme } from '@mui/material/styles';
+import 'katex/dist/katex.min.css';
+import { InlineMath, BlockMath } from 'react-katex';
+import AppBar from '../shared/AppBar';
 
 function LearnMenu() {
+    const navigate = useNavigate();
+    const theme = useTheme();
 
     const pages = StepsByPage.map(theorem => ({
         name: theorem.theoremName,
@@ -9,39 +16,31 @@ function LearnMenu() {
     }));
 
     return (
-        <Container>
-            <Typography variant="h2" component="h1" gutterBottom color="var(--color-text-primary)">
-                Theorems
-            </Typography>
-            <Box sx={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(4, 1fr)',
-                gap: 2,
-            }}>
-                {pages.map((item, index) => (
-                    <Box
-                        key={index}
-                        component="a"
-                        href={item.link}
-                        sx={{
-                            bgcolor: 'secondary.main',
-                            color: 'secondary.contrastText',
-                            p: 2,
-                            borderRadius: 1,
-                            textAlign: 'center',
-                            textDecoration: 'none',
-                            '&:hover': {
-                                bgcolor: 'secondary.dark',
-                                boxShadow: 1,
-                            },
-                            fontSize: '2rem',
-                        }}
-                    >
-                        {item.name}
-                    </Box>
-                ))}
-            </Box>
-        </Container>
+        <>
+            <AppBar returnPath="/" titleText="Theorems" />
+            <Container>
+                <Box sx={{ height: '20px' }} />
+                <Box sx={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(4, 1fr)',
+                    gap: 2,
+                }}>
+                    {pages.map((item, index) => (
+                        <Button
+                            variant="contained"
+                            key={index}
+                            size="large"
+                            onClick={() => navigate(item.link)}
+                            sx={{
+                                whiteSpace: 'nowrap',
+                            }}
+                        >
+                            <Typography variant="h4"><InlineMath >{item.name}</InlineMath></Typography>
+                        </Button>
+                    ))}
+                </Box>
+            </Container>
+        </>
     );
 }
 
