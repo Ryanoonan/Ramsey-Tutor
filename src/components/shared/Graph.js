@@ -11,7 +11,7 @@ function Graph({
     width = 800,
     height = 600,
     highlightedNodes = null,
-    animationDuration = 500,
+    animationDuration = 3000,
     shouldAnimate = false
 }) {
 

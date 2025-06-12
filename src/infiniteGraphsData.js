@@ -46,6 +46,14 @@ graph7.colorEdgesFromNode(18, theme.palette.custom.edgeBlue);
 let graph8 = graph7.clone();
 graph8.colorEdgesFromNode(30, theme.palette.custom.edgeRed);
 
+
+
+let graph9 = graph1.clone();
+[0, 10, 20, 50, 57, 66, 69].forEach(id => {
+    graph9.colorEdgesFromNode(id, theme.palette.custom.edgeRed);
+});
+
+let graph10 = new KInfGraph({ n: 70, ids: [0, 10, 20, 50, 57, 66, 69].concat([70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132]), defaultColor: theme.palette.custom.edgeRed });
 export const infiniteGraphs = [
-    graph1, graph2, graph3, graph4, graph5, graph6, graph7, graph8
+    graph1, graph2, graph3, graph4, graph5, graph6, graph7, graph8, graph9, graph10
 ]

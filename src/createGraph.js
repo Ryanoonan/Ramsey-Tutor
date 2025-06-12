@@ -42,14 +42,19 @@ export function createCompleteLinks(nodes, redEdges = [], blueEdges = [], defaul
 }
 
 export class KnGraph {
-    constructor({ n, defaultColor = theme.palette.custom.edgeDefault, redEdges = [], blueEdges = [], circleRadius = 150 }) {
+    constructor({ n, defaultColor = theme.palette.custom.edgeDefault, redEdges = [], blueEdges = [], circleRadius = 150, ids = [] }) {
         const nodeRadius = calculateNodeRadius(n);
         const lineWidth = calculateLineWidth(n);
+
+        let newIds = ids
+        if (ids.length === 0) {
+            newIds = [...Array(n).keys()]
+        }
 
         const adjustedCircleRadius = n > 15 ? circleRadius + Math.min(100, n * 3) : circleRadius;
 
         const nodes = Array.from({ length: n }, (_, i) => ({
-            id: i,
+            id: newIds[i],
             x: 300 + adjustedCircleRadius * Math.cos((i * 2 * Math.PI) / n),
             y: 300 + adjustedCircleRadius * Math.sin((i * 2 * Math.PI) / n),
             radius: nodeRadius,
@@ -94,8 +99,6 @@ export class KInfGraph {
         let newIds = ids
         if (ids.length === 0) {
             newIds = [...Array(n).keys()]
-        }
-        else {
         }
         const adjustedCircleRadius = n > 15 ? circleRadius + Math.min(100, n * 3) : circleRadius;
         const nodes = Array.from({ length: n }, (_, i) => {
