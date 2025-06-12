@@ -99,35 +99,6 @@ export function IdxRatioToAngle(x) {
 }
 
 
-
-
-export function KInfGraphWithKeepIds({ originalGraph, n = 50, defaultColor = theme.palette.custom.edgeDefault, redEdges = [], blueEdges = [], circleRadius = 150, idsToKeep = [], centerNodeId, idsToDrop = [] }) {
-    const oldIds = originalGraph[0].map((node) => node.id)
-    let newIds;
-    if (idsToDrop.length > 0) {
-        newIds = oldIds.filter(id => !idsToDrop.includes(id));
-        newIds.push(Math.floor((Math.random() + 100) * 10000));
-    } else {
-        newIds = [...Array(26).keys()].map(x => Math.floor((Math.random() + 100) * 10000))
-        newIds.push(...idsToKeep)
-        newIds.push([...Array(n - newIds.length).keys()].map(x => Math.floor((Math.random() + 100) * 10000)))
-        // Flatten the newIds array in case there are nested arrays
-        newIds = newIds.flat();
-
-        if (idsToKeep.includes(centerNodeId)) {
-            const centerNodeIndex = newIds.indexOf(centerNodeId);
-
-            for (let i = 0; i < newIds.length; i++) {
-                if (i !== centerNodeIndex) {
-                    blueEdges.push([centerNodeId, newIds[i]]);
-                }
-            }
-        }
-
-    }
-    return KInfGraph({ n, defaultColor, redEdges, blueEdges, circleRadius, ids: newIds });
-}
-
 export function GetRadiusFromAngle(x) {
     const distToStart = Math.min(x, 2 * Math.PI - x);
     const normalizedDist = distToStart / Math.PI;
