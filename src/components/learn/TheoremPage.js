@@ -26,11 +26,24 @@ function TheoremPage() {
 
     const executeStepAction = (step) => {
         if (step.graph) {
-            const nodes = step.graph.nodes;
-            const links = step.graph.links;
+            const graphData = step.graph;
+            const graphClass = graphData.constructor;
+            const params = {
+                n: graphData.nodes.length,
+                defaultColor: graphData.defaultColor || theme.palette.custom.edgeDefault,
+                redEdges: graphData.redEdges || [],
+                blueEdges: graphData.blueEdges || [],
+                circleRadius: graphData.circleRadius || 150,
+                ids: graphData.ids || graphData.nodes.map(n => n.id),
+                width: dimensions.width,
+                height: dimensions.height
+            };
+
+            const newGraph = new graphClass(params);
+
             setGraph({
-                nodes: nodes,
-                links: links
+                nodes: newGraph.nodes,
+                links: newGraph.links
             });
         }
 
@@ -69,16 +82,30 @@ function TheoremPage() {
 
     useEffect(() => {
         const initializeGraph = () => {
-            const initNodes = currentTheoremData.initialGraph.nodes;
-            const initLinks = currentTheoremData.initialGraph.links;
+            const graphData = currentTheoremData.initialGraph;
+            const graphClass = graphData.constructor;
+
+            const params = {
+                n: graphData.nodes.length,
+                defaultColor: graphData.defaultColor || theme.palette.custom.edgeDefault,
+                redEdges: graphData.redEdges || [],
+                blueEdges: graphData.blueEdges || [],
+                circleRadius: graphData.circleRadius || 150,
+                ids: graphData.ids || graphData.nodes.map(n => n.id),
+                width: dimensions.width,
+                height: dimensions.height
+            };
+
+            const newGraph = new graphClass(params);
+
             setGraph({
-                nodes: initNodes,
-                links: initLinks
+                nodes: newGraph.nodes,
+                links: newGraph.links
             });
         };
 
         initializeGraph();
-    }, [currentTheoremData.initialGraph]);
+    }, [currentTheoremData.initialGraph, dimensions]);
 
     const handleNext = () => {
         if (nextStepIndex >= steps.length) return;
@@ -149,9 +176,6 @@ function TheoremPage() {
                         flex: 1,
                         height: '70vh',
                         width: '45vw',
-                        border: '1px solid',
-                        borderColor: theme.palette.divider,
-                        borderRadius: '8px',
                     }}>
                         <Graph
                             nodes={graph.nodes}

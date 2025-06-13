@@ -42,7 +42,7 @@ export function createCompleteLinks(nodes, redEdges = [], blueEdges = [], defaul
 }
 
 export class KnGraph {
-    constructor({ n, defaultColor = theme.palette.custom.edgeDefault, redEdges = [], blueEdges = [], circleRadius = 150, ids = [] }) {
+    constructor({ n, defaultColor = theme.palette.custom.edgeDefault, redEdges = [], blueEdges = [], circleRadius = 150, ids = [], width = 600, height = 600 }) {
         const nodeRadius = calculateNodeRadius(n);
         const lineWidth = calculateLineWidth(n);
 
@@ -52,11 +52,13 @@ export class KnGraph {
         }
 
         const adjustedCircleRadius = n > 15 ? circleRadius + Math.min(100, n * 3) : circleRadius;
+        const centerX = width / 2;
+        const centerY = height / 2;
 
         const nodes = Array.from({ length: n }, (_, i) => ({
             id: newIds[i],
-            x: 300 + adjustedCircleRadius * Math.cos((i * 2 * Math.PI) / n),
-            y: 300 + adjustedCircleRadius * Math.sin((i * 2 * Math.PI) / n),
+            x: centerX + adjustedCircleRadius * Math.cos((i * 2 * Math.PI) / n),
+            y: centerY + adjustedCircleRadius * Math.sin((i * 2 * Math.PI) / n),
             radius: nodeRadius,
         }));
 
@@ -93,7 +95,7 @@ export function GetRadiusFromAngle(x) {
 }
 
 export class KInfGraph {
-    constructor({ n = 50, defaultColor = theme.palette.custom.edgeDefault, redEdges = [], blueEdges = [], circleRadius = 150, ids = [] }) {
+    constructor({ n = 50, defaultColor = theme.palette.custom.edgeDefault, redEdges = [], blueEdges = [], circleRadius = 150, ids = [], width = 600, height = 600 }) {
         const baseNodeRadius = calculateNodeRadius(n);
         const lineWidth = calculateLineWidth(n);
         let newIds = ids
@@ -101,15 +103,17 @@ export class KInfGraph {
             newIds = [...Array(n).keys()]
         }
         const adjustedCircleRadius = n > 15 ? circleRadius + Math.min(100, n * 3) : circleRadius;
+        const centerX = width / 2;
+        const centerY = height / 2;
+
         const nodes = Array.from({ length: n }, (_, i) => {
             const angle = IdxRatioToAngle(i / n);
             const radius = GetRadiusFromAngle(angle) * baseNodeRadius;
             return {
                 id: newIds[i],
-                x: 300 + adjustedCircleRadius * Math.cos(angle),
-                y: 300 + adjustedCircleRadius * Math.sin(angle),
+                x: centerX + adjustedCircleRadius * Math.cos(angle),
+                y: centerY + adjustedCircleRadius * Math.sin(angle),
                 radius: radius,
-
             }
         });
         this.nodes = nodes;
@@ -118,6 +122,8 @@ export class KInfGraph {
         this.redEdges = redEdges;
         this.blueEdges = blueEdges;
         this.circleRadius = circleRadius;
+        this.width = width;
+        this.height = height;
         this.ids = newIds;
         this.links = this.getNewLinks();
     }
@@ -159,7 +165,16 @@ export class KInfGraph {
     }
 
     clone() {
-        const newGraph = new KInfGraph({ n: this.n, defaultColor: this.defaultColor, redEdges: this.redEdges, blueEdges: this.blueEdges, circleRadius: this.circleRadius, ids: structuredClone(this.ids) });
+        const newGraph = new KInfGraph({
+            n: this.n,
+            defaultColor: this.defaultColor,
+            redEdges: this.redEdges,
+            blueEdges: this.blueEdges,
+            circleRadius: this.circleRadius,
+            ids: structuredClone(this.ids),
+            width: this.width,
+            height: this.height
+        });
         newGraph.nodes = structuredClone(this.nodes);
         newGraph.links = structuredClone(this.links);
         newGraph.ids = structuredClone(this.ids);
