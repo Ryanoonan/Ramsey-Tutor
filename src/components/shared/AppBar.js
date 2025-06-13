@@ -11,7 +11,7 @@ function AppBar({ returnPath, titleText, formatMath }) {
     const theme = useTheme();
     const navigate = useNavigate();
     return (
-        <MuiAppBar position="static" sx={{ bgcolor: theme.palette.background.paper }}>
+        <MuiAppBar position="static" sx={{ bgcolor: theme.palette.background.paper, height: '12vh' }}>
             <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Box sx={{ width: '150px' }}>
                     <Button color="inherit" onClick={() => navigate(returnPath)} sx={{ mr: 2 }}>
