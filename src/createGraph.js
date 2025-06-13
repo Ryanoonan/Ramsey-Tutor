@@ -2,7 +2,9 @@ import { lerpColor } from "./animationHelpers";
 import theme from './theme';
 
 function calculateNodeRadius(nodeCount) {
-    if (nodeCount <= 50) return 30;
+    if (nodeCount <= 10) return 30;
+    if (nodeCount <= 20) return 22;
+    if (nodeCount <= 50) return 18;
     return 15;
 }
 
@@ -217,7 +219,7 @@ export class KInfGraph {
                 link.color === theme.palette.custom.edgeBlue;
 
             if (isSpecialEdge) {
-                adjustedLineWidth = lineWidth * 5;
+                adjustedLineWidth = lineWidth * 2;
                 let lerpWith;
                 if (link.color === theme.palette.custom.edgeRed) {
                     lerpWith = 'rgba(255,0,0,0)';
