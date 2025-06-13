@@ -215,7 +215,7 @@ export class KInfGraph {
             const nodeI = this.nodes.find(node => node.id === id1);
             const nodeJ = this.nodes.find(node => node.id === id2);
 
-            const opacity = Math.min(nodeI.radius, nodeJ.radius) / baseNodeRadius;
+            const opacity = Math.min((Math.min(nodeI.radius, nodeJ.radius) / baseNodeRadius) * 3, 1);
             let adjustedLineWidth = link.width;
             let adjustedLineColor = link.color;
 
@@ -223,7 +223,7 @@ export class KInfGraph {
                 link.color === theme.palette.custom.edgeBlue;
 
             if (isSpecialEdge) {
-                adjustedLineWidth = lineWidth * 2;
+                adjustedLineWidth = lineWidth * 4;
                 let lerpWith;
                 if (link.color === theme.palette.custom.edgeRed) {
                     lerpWith = 'rgba(255,0,0,0)';
