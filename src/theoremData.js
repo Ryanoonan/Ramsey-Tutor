@@ -340,14 +340,60 @@ const StepsByPage = [
         ]
     },
     {
-        theoremName: "R(3,5) = 14",
-        theoremNameSlug: "r3-5-equals-14",
-        initialGraph: new KnGraph({ n: 14 }),
+        theoremName: "R(4,4) = 18",
+        theoremNameSlug: "r4-4-equals-18",
+        initialGraph: new KnGraph({ n: 18 }),
         steps: [
             {
-                content: "R(3,5) = 14 means that in any coloring of the edges of K14 with 2 colors, there will be either a red triangle or a blue K5.",
-                graph: new KnGraph({ n: 14 }),
+                content: "R(4,4) = 18 means that in any coloring of the edges of K18 with 2 colors, there will be either a red K4 or a blue K4.",
+                graph: new KnGraph({ n: 18 }),
+                shouldAnimate: false,
+            },
+            {
+
+                content: "Select any node.",
+                graph: new KnGraph({ n: 18 }),
+                highlightedNodes: [0],
+                shouldAnimate: false,
+            },
+            {
+                content: "Since there are 17 edges leaving this node, by pigeonhole principle, at least 9 of them must be the same color. WLOG these edges are red.",
+                graph: new KnGraph({ n: 18, redEdges: [[0, 6], [0, 7], [0, 3], [0, 4], [0, 10], [0, 14], [0, 15], [0, 8], [0, 9]] }),
+                highlightedNodes: [0],
                 shouldAnimate: true,
+            },
+            {
+                content: "Lets take a look at this subgraph.",
+                graph: new KnGraph({ n: 10, redEdges: [[0, 6], [0, 7], [0, 3], [0, 4], [0, 10], [0, 14], [0, 15], [0, 8], [0, 9]], ids: [0, 3, 4, 6, 7, 8, 9, 10, 14, 15] }),
+                shouldAnimate: true,
+                animationDuration: 2000,
+            },
+            {
+                content: "Lets look at all these nodes (Except our original selected node).",
+                graph: new KnGraph({ n: 10, redEdges: [[0, 6], [0, 7], [0, 3], [0, 4], [0, 10], [0, 14], [0, 15], [0, 8], [0, 9]], ids: [0, 3, 4, 6, 7, 8, 9, 10, 14, 15] }),
+                shouldAnimate: true,
+                highlightedNodes: [3, 4, 6, 7, 8, 9, 10, 14, 15],
+                animationDuration: 2000,
+            },
+            {
+                content: "Notice anything? Yes! This is K_9! We know that R(3,4) = 9, so there must be a red triangle or a blue K4 in this subgraph.",
+                graph: new KnGraph({ n: 10, redEdges: [[0, 6], [0, 7], [0, 3], [0, 4], [0, 10], [0, 14], [0, 15], [0, 8], [0, 9]], ids: [0, 3, 4, 6, 7, 8, 9, 10, 14, 15] }),
+                shouldAnimate: true,
+                highlightedNodes: [3, 4, 6, 7, 8, 9, 10, 14, 15],
+                animationDuration: 2000,
+            },
+            {
+                content: "If there is a blue K4, we are done, and if there is a red triangle, well...",
+                graph: new KnGraph({ n: 10, redEdges: [[0, 6], [0, 7], [0, 3], [0, 4], [0, 10], [0, 14], [0, 15], [0, 8], [0, 9], [8, 15], [9, 15], [8, 9]], ids: [0, 3, 4, 6, 7, 8, 9, 10, 14, 15] }),
+                shouldAnimate: true,
+                highlightedNodes: [8, 9, 15],
+                animationDuration: 2000,
+            },
+            {
+                content: "We have a red K4!",
+                graph: new KnGraph({ n: 4, redEdges: [[0, 9], [0, 8], [0, 15], [8, 15], [9, 15], [8, 9]], ids: [0, 8, 9, 15] }),
+                shouldAnimate: true,
+                animationDuration: 2000,
             },
         ]
     }]

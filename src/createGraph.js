@@ -10,7 +10,7 @@ function calculateNodeRadius(nodeCount) {
 
 function calculateLineWidth(nodeCount) {
     if (nodeCount <= 10) return 5;
-    if (nodeCount <= 20) return 1;
+    if (nodeCount <= 20) return 2;
     if (nodeCount <= 40) return 2;
     if (nodeCount <= 60) return 0.5;
     return 1;
@@ -31,11 +31,15 @@ export function createCompleteLinks(nodes, redEdges = [], blueEdges = [], defaul
             let color = defaultColor;
             if (isRedEdge) color = theme.palette.custom.edgeRed;
             if (isBlueEdge) color = theme.palette.custom.edgeBlue;
+            let adjustedLineWidth = lineWidth;
+            if (isRedEdge || isBlueEdge) {
+                adjustedLineWidth = lineWidth * 2;
+            }
 
             links.push({
                 edge: [id1, id2],
                 color: color,
-                width: lineWidth
+                width: adjustedLineWidth
             });
         }
     }
