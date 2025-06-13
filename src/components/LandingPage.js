@@ -1,11 +1,29 @@
 import { Box, Button, Typography, useTheme } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-
+import { useMediaQuery } from 'react-responsive';
 function LandingPage() {
     const navigate = useNavigate();
     const theme = useTheme();
+    const isMobile = useMediaQuery({ maxWidth: 767 });
+    if (isMobile) {
+        return (
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100vh',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '1rem',
+                textAlign: 'center',
+            }}>
+                <h2>This site is designed for desktop browsers.</h2>
+                <p>For the best experience, please visit on a larger screen.</p>
+            </div>
+        );
+    }
 
     return (
+
         <Box sx={{
             position: 'fixed',
             width: '100%',
