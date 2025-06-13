@@ -21,28 +21,24 @@ const StepsByPage = [
             {
                 content: 'This node has 5 outgoing edges. By pigeonhole principle, if we color them with red and blue, at least 3 edges must be the same color. WLOG these edges are red.',
                 graph: new KnGraph({ n: 6, redEdges: [[0, 1], [0, 2], [0, 3]] }),
+                shouldAnimate: true,
+                animationDuration: 400,
+            },
+            {
+                content: "Lets take a closer look at the graph formed on these nodes.",
+                graph: new KnGraph({ n: 4, redEdges: [[0, 1], [0, 2], [0, 3]] }),
+                shouldAnimate: true,
+                animationDuration: 1500,
             },
             {
                 content: 'For each uncolored edge, coloring this red would lead to a red triangle. Therefore these edges must be blue.',
-                graph: new KnGraph({ n: 6, redEdges: [[0, 1], [0, 2], [0, 3]], blueEdges: [[1, 2], [1, 3], [2, 3]] }),
-
-            },
-            {
-                content: 'Duplicate step test',
-                graph: new KnGraph({ n: 6, redEdges: [[0, 1], [0, 2], [0, 3]], blueEdges: [[1, 2], [1, 3], [2, 3]] }),
-                shouldAnimate: true,
-
-
-            },
-            {
-                content: "Empty",
                 graph: new KnGraph({ n: 4, redEdges: [[0, 1], [0, 2], [0, 3]], blueEdges: [[1, 2], [1, 3], [2, 3]] }),
                 shouldAnimate: true,
-                animationDuration: 3000,
+                animationDuration: 400,
             },
             {
                 content: 'We have formed a blue triangle! Therefore it is impossible to color the edges of K6 with 2 colors without forming a monochromatic triangle.',
-                graph: new KnGraph({ n: 4 }),
+                graph: new KnGraph({ n: 4, redEdges: [[0, 1], [0, 2], [0, 3]], blueEdges: [[1, 2], [1, 3], [2, 3]] }),
             }
 
         ]
