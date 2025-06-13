@@ -13,11 +13,11 @@ let graph3 = new KInfGraph({
 
 graph3.colorEdgesFromNode(0, theme.palette.custom.edgeBlue);
 let graph4 = graph3.clone();
+
 graph4.dropNodeWithId(70, 119);
-graph4.addNode({
+
+graph4.addNodeToCenter({
     id: 70,
-    x: 300,
-    y: 300,
     radius: 7
 });
 graph4.links = graph4.getNewLinks();

@@ -33,11 +33,13 @@ const StepsByPage = [
                 graph: new KnGraph({ n: 6, redEdges: [[0, 1], [0, 2], [0, 3]], blueEdges: [[1, 2], [1, 3], [2, 3]] }),
                 shouldAnimate: true,
 
+
             },
             {
                 content: "Empty",
                 graph: new KnGraph({ n: 4, redEdges: [[0, 1], [0, 2], [0, 3]], blueEdges: [[1, 2], [1, 3], [2, 3]] }),
                 shouldAnimate: true,
+                animationDuration: 3000,
             },
             {
                 content: 'We have formed a blue triangle! Therefore it is impossible to color the edges of K6 with 2 colors without forming a monochromatic triangle.',
@@ -55,18 +57,19 @@ const StepsByPage = [
                 content: "Select any node.",
                 graph: infiniteGraphs[0],
                 highlightedNodes: [0],
-                shouldAnimate: true,
             },
             {
                 content: "By infinite pigeonhole principle, at least infinitely many edges leaving this node must be the same color. WLOG these edges are blue.",
                 graph: infiniteGraphs[1],
                 shouldAnimate: true,
+                animationDuration: 500,
                 highlightedNodes: [0]
             },
             {
                 content: "Lets take a closer look at the blue edges, and drop all the nodes (and edges on these nodes) that are not connected to the selected node by a blue edge. We are still inside a KInf graph.",
                 graph: infiniteGraphs[2],
                 shouldAnimate: true,
+                animationDuration: 4000,
                 highlightedNodes: [0]
             },
             {
@@ -79,7 +82,7 @@ const StepsByPage = [
                 content: "Lets move it to the center",
                 graph: infiniteGraphs[3],
                 shouldAnimate: true,
-                highlightedNodes: [0, 70]
+                highlightedNodes: [0, 70, 119]
             },
             {
                 content: "By pigeonhole principle once again, at least infinitely many edges leaving this NEW node must be the same color. Lets suppose for now these edges are red.",
@@ -337,7 +340,18 @@ const StepsByPage = [
 
         ]
     },
-];
+    {
+        theoremName: "R(3,5) = 14",
+        theoremNameSlug: "r3-5-equals-14",
+        initialGraph: new KnGraph({ n: 14 }),
+        steps: [
+            {
+                content: "R(3,5) = 14 means that in any coloring of the edges of K14 with 2 colors, there will be either a red triangle or a blue K5.",
+                graph: new KnGraph({ n: 14 }),
+                shouldAnimate: true,
+            },
+        ]
+    }]
 
 
 export default StepsByPage;

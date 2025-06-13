@@ -24,6 +24,7 @@ function TheoremPage() {
     const currentTheoremData = StepsByPage.filter(item => item.theoremNameSlug === slug)[0] || StepsByPage[0];
 
     const [shouldAnimate, setShouldAnimate] = useState(false);
+    const [animationDuration, setAnimationDuration] = useState(1000);
 
     const executeStepAction = (step) => {
         if (step.graph) {
@@ -61,7 +62,8 @@ function TheoremPage() {
         graph: step.graph,
         highlightedNodes: step.highlightedNodes,
         newSubGraphNodes: step.newSubGraphNodes,
-        shouldAnimate: step.shouldAnimate || false
+        shouldAnimate: step.shouldAnimate || false,
+        animationDuration: step.animationDuration || 1000,
     }));
 
     useEffect(() => {
@@ -116,6 +118,7 @@ function TheoremPage() {
         const newItem = steps[nextStepIndex];
 
         setShouldAnimate(newItem.shouldAnimate || false);
+        setAnimationDuration(newItem.animationDuration || 1000);
 
         if (newItem.action) {
             newItem.action();
@@ -192,7 +195,7 @@ function TheoremPage() {
                 }}>
                     <Box id="learn-graph-container" sx={{
                         flex: 1,
-                        height: '70vh',
+                        height: '80vh',
                         width: '45vw',
                     }}>
                         <Graph
@@ -203,6 +206,7 @@ function TheoremPage() {
                             linkColor={theme.palette.custom.edgeDefault}
                             highlightedNodes={highlightedNodes}
                             shouldAnimate={shouldAnimate}
+                            animationDuration={animationDuration}
                             onAnimationStateChange={setIsAnimating}
                         />
                     </Box>
@@ -258,7 +262,7 @@ function TheoremPage() {
                                             variant="body1"
                                             sx={{
                                                 textAlign: 'left',
-                                                fontSize: '1.8rem',
+                                                fontSize: '1.4rem',
                                                 fontFamily: 'Helvetica',
                                                 mb: idx < visibleSteps.length - 1 ? 2 : 0
                                             }}

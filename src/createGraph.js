@@ -190,9 +190,9 @@ export class KInfGraph {
         return newGraph;
     }
 
-    addNode(node) {
+    addNodeToCenter(node) {
         if (!this.nodes.some(n => n.id === node.id)) {
-            this.nodes.push(node);
+            this.nodes.push({ ...node, x: this.width / 2, y: this.height / 2 });
             this.links = createCompleteLinks(this.nodes, this.redEdges, this.blueEdges, this.defaultColor, calculateLineWidth(this.n));
         }
         else {
