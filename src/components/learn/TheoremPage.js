@@ -108,7 +108,7 @@ function TheoremPage() {
         };
 
         initializeGraph();
-    }, [currentTheoremData.initialGraph, dimensions]);
+    }, [currentTheoremData.initialGraph, dimensions, theme.palette.custom.edgeDefault]);
 
     const handleNext = () => {
         if (nextStepIndex >= steps.length) return;

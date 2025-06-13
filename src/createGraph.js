@@ -1,4 +1,4 @@
-import { applyOpacity, lerpColor } from "./animationHelpers";
+import { lerpColor } from "./animationHelpers";
 import theme from './theme';
 
 function calculateNodeRadius(nodeCount) {
@@ -106,7 +106,6 @@ export function GetRadiusFromAngle(x) {
 export class KInfGraph {
     constructor({ n = 50, defaultColor = theme.palette.custom.edgeDefault, redEdges = [], blueEdges = [], circleRadius = 150, ids = [], width = 600, height = 600 }) {
         const baseNodeRadius = calculateNodeRadius(n);
-        const lineWidth = calculateLineWidth(n);
         let newIds = ids
         if (ids.length === 0) {
             newIds = [...Array(n).keys()]

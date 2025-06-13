@@ -161,7 +161,7 @@ function Graph({
             }
             drawGraph(nodes, links);
         }
-    }, [nodes, links, animationDuration, onAnimationStateChange]);
+    }, [nodes, links, animationDuration, onAnimationStateChange, drawGraph]);
 
 
     useEffect(() => {
@@ -214,7 +214,7 @@ function Graph({
                 cancelAnimationFrame(animationRef.current);
             }
         };
-    }, [nodes, links, shouldAnimate, animationTick, onAnimationStateChange]);
+    }, [nodes, links, shouldAnimate, animationTick, onAnimationStateChange, drawGraph]);
 
     return (
         <div style={{ width, height }}>

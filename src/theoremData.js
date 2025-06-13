@@ -3,7 +3,6 @@ import theme from "./theme"
 
 import { KnGraph } from "./createGraph";
 import { infiniteGraphs } from "./infiniteGraphsData";
-import { red } from "@mui/material/colors";
 
 const StepsByPage = [
     {
