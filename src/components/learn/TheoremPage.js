@@ -105,8 +105,14 @@ function TheoremPage() {
                 width: dimensions.width,
                 height: dimensions.height
             };
-
-            const newGraph = new graphClass(params);
+            let newGraph;
+            if (graphClass.name === 'KInfGraph') {
+                newGraph = graphData.clone();
+            } else {
+                newGraph = new graphClass(params);
+            }
+            newGraph.width = dimensions.width;
+            newGraph.height = dimensions.height;
 
             setGraph({
                 nodes: newGraph.nodes,

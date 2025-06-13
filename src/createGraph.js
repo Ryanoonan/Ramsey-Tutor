@@ -218,7 +218,14 @@ export class KInfGraph {
 
             if (isSpecialEdge) {
                 adjustedLineWidth = lineWidth * 5;
-                adjustedLineColor = lerpColor('rgba(0,0,0,0)', adjustedLineColor, Math.min(opacity * 3, 1));
+                let lerpWith;
+                if (link.color === theme.palette.custom.edgeRed) {
+                    lerpWith = 'rgba(255,0,0,0)';
+                }
+                if (link.color === theme.palette.custom.edgeBlue) {
+                    lerpWith = 'rgba(0,0,255,0)';
+                }
+                adjustedLineColor = lerpColor(lerpWith, adjustedLineColor, Math.min(opacity * 3, 1));
             } else {
                 adjustedLineColor = lerpColor('rgba(0,0,0,0)', adjustedLineColor, opacity);
             }
