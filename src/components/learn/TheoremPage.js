@@ -4,6 +4,7 @@ import Graph from '../shared/Graph';
 import StepsByPage from '../../theoremData';
 import { useParams } from 'react-router-dom'
 import AppBar from '../shared/AppBar';
+import { InlineMath } from 'react-katex';
 
 function TheoremPage() {
     const { slug } = useParams();
@@ -122,22 +123,35 @@ function TheoremPage() {
     };
 
     return (
-        <>
+        <Box sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            minHeight: '100vh',
+            overflow: 'hidden'
+        }}>
             <AppBar returnPath="/learnmenu" titleText={currentTheoremData.theoremName} formatMath={true} />
-            <Box sx={{ height: '20px' }} />
-            <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-
-
+            <Box sx={{ height: '2vh' }} />
+            <Box sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                flexGrow: 1
+            }}>
                 <Box sx={{
-                    flex: 1,
+                    flexGrow: 1,
                     display: 'flex',
-                    gap: 2,
-                    p: 2,
-                    backgroundColor: theme.palette.background.default
+                    flexDirection: { xs: 'column', md: 'row' },
+                    gap: '2vh',
+                    p: '2vh',
+                    backgroundColor: theme.palette.background.default,
+                    overflow: 'auto'
                 }}>
                     <Box id="learn-graph-container" sx={{
                         flex: 1,
-                        minHeight: '600px'
+                        height: '70vh',
+                        width: '45vw',
+                        border: '1px solid',
+                        borderColor: theme.palette.divider,
+                        borderRadius: '8px',
                     }}>
                         <Graph
                             nodes={graph.nodes}
@@ -152,26 +166,29 @@ function TheoremPage() {
 
                     <Paper sx={{
                         flex: 1,
-                        p: 2,
+                        p: '2vh',
                         display: 'flex',
                         flexDirection: 'column',
-                        gap: 2,
+                        gap: '2vh',
+                        overflow: 'auto',
+                        maxHeight: '90vh',
+                        minWidth: '45vw',
                         bgcolor: theme.palette.background.paper,
                         color: theme.palette.text.primary,
                         boxShadow: 'none',
                         borderRadius: 1
                     }}>
-                        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
+                        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '2vh' }}>
                             <Typography
                                 variant="h5"
                                 sx={{
                                     textAlign: 'left',
-                                    fontSize: '2rem',
+                                    fontSize: '3vh',
                                     fontFamily: 'Helvetica',
-                                    mb: 2
+                                    mb: '2vh'
                                 }}
                             >
-                                {currentTheoremData.theoremName}
+                                <InlineMath>{currentTheoremData.theoremName}</InlineMath>
                             </Typography>
 
                             {!showProof ? (
@@ -213,6 +230,7 @@ function TheoremPage() {
                         {showProof && (
                             <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
                                 <Button
+                                    variant="contained"
                                     onClick={handlePrevious}
                                     disabled={nextStepIndex === 1}
                                 >
@@ -228,9 +246,9 @@ function TheoremPage() {
                             </Box>
                         )}
                     </Paper>
-                </Box >
-            </Box >
-        </>
+                </Box>
+            </Box>
+        </Box>
     );
 }
 

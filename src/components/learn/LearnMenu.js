@@ -3,12 +3,11 @@ import StepsByPage from '../../theoremData';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import 'katex/dist/katex.min.css';
-import { InlineMath, BlockMath } from 'react-katex';
+import { InlineMath } from 'react-katex';
 import AppBar from '../shared/AppBar';
 
 function LearnMenu() {
     const navigate = useNavigate();
-    const theme = useTheme();
 
     const pages = StepsByPage.map(theorem => ({
         name: theorem.theoremName,
