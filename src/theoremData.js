@@ -25,7 +25,7 @@ const StepsByPage = [
                 animationDuration: 400,
             },
             {
-                content: "Lets take a closer look at the graph formed on these nodes.",
+                content: "Let's take a closer look at the graph formed on these nodes.",
                 graph: new KnGraph({ n: 4, redEdges: [[0, 1], [0, 2], [0, 3]] }),
                 shouldAnimate: true,
                 animationDuration: 1500,
@@ -61,7 +61,7 @@ const StepsByPage = [
                 highlightedNodes: [0]
             },
             {
-                content: "Lets take a closer look at the blue edges, and drop all the nodes (and edges on these nodes) that are not connected to the selected node by a blue edge. We are still inside a KInf graph.",
+                content: "Let's take a closer look at the blue edges, and drop all the nodes (and edges on these nodes) that are not connected to the selected node by a blue edge. We are still inside a KInf graph.",
                 graph: infiniteGraphs[2],
                 shouldAnimate: true,
                 animationDuration: 4000,
@@ -74,19 +74,19 @@ const StepsByPage = [
                 highlightedNodes: [0, 70]
             },
             {
-                content: "Lets move it to the center",
+                content: "Let's move it to the center",
                 graph: infiniteGraphs[3],
                 shouldAnimate: true,
                 highlightedNodes: [0, 70, 119]
             },
             {
-                content: "By pigeonhole principle once again, at least infinitely many edges leaving this NEW node must be the same color. Lets suppose for now these edges are red.",
+                content: "By pigeonhole principle once again, at least infinitely many edges leaving this NEW node must be the same color. Let's suppose for now these edges are red.",
                 graph: infiniteGraphs[4],
                 shouldAnimate: true,
                 highlightedNodes: [0, 70]
             },
             {
-                content: "Now, lets keep only the nodes in the graph that are connected to the second selected node by a red edge. We are once again still inside a KInf graph.",
+                content: "Now, Let's keep only the nodes in the graph that are connected to the second selected node by a red edge. We are once again still inside a KInf graph.",
                 graph: infiniteGraphs[5],
                 shouldAnimate: true,
                 highlightedNodes: [0, 70]
@@ -115,7 +115,7 @@ const StepsByPage = [
                 shouldAnimate: true,
             },
             {
-                content: "By applying infinite pigeonhole principle again, there must be infinitely many nodes with infinitely many outgoing edges of the same color. Lets highlight these nodes, and suppose the edges are red.",
+                content: "By applying infinite pigeonhole principle again, there must be infinitely many nodes with infinitely many outgoing edges of the same color. Let's highlight these nodes, and suppose the edges are red.",
                 graph: infiniteGraphs[8],
                 highlightedNodes: [0, 10, 20, 50, 57, 66, 69],
                 shouldAnimate: true,
@@ -137,22 +137,21 @@ const StepsByPage = [
             {
                 content: "R(3,4) = 9 means that in any coloring of the edges of K9 with 2 colors, there will be either a red triangle or a blue K4. (We choose red as the first color and blue as the second color.)",
                 graph: new KnGraph({ n: 9 }),
-                shouldAnimate: true,
             },
             {
                 content: "Select any node.",
                 graph: new KnGraph({ n: 9 }),
                 highlightedNodes: [0],
-                shouldAnimate: true,
             },
             {
                 content: "Suppose this node has at least 4 outgoing red edges.",
                 graph: new KnGraph({ n: 9, redEdges: [[0, 1], [0, 3], [0, 4], [0, 5]] }),
                 highlightedNodes: [0],
                 shouldAnimate: true,
+                animationDuration: 300,
             },
             {
-                content: "Lets take a look at this subgraph.",
+                content: "Let's take a look at this subgraph.",
                 graph: new KnGraph({ n: 5, redEdges: [[0, 1], [0, 3], [0, 4], [0, 5]], ids: [0, 1, 3, 4, 5] }),
                 highlightedNodes: [0],
                 shouldAnimate: true,
@@ -167,22 +166,20 @@ const StepsByPage = [
                 content: "But here we have a blue K4!",
                 graph: new KnGraph({ n: 5, redEdges: [[0, 1], [0, 3], [0, 4], [0, 5]], blueEdges: [[1, 3], [1, 4], [1, 5], [3, 4], [3, 5], [4, 5]], ids: [0, 1, 3, 4, 5] }),
                 highlightedNodes: [0],
-                shouldAnimate: true,
+
             },
             {
-                content: "Lets return to our original graph.",
+                content: "Let's return to our original graph.",
                 graph: new KnGraph({ n: 9 }),
                 shouldAnimate: true,
             },
             {
                 content: "We saw that for any node, if it has at least 4 outgoing red edges, we can find a blue K4 or red triangle. So we can assume that any node has at most 3 outgoing red edges.",
                 graph: new KnGraph({ n: 9 }),
-                shouldAnimate: true,
             },
             {
                 content: "Now we will show that any nodes has at most 5 outoging blue edges, with a similar argument.",
                 graph: new KnGraph({ n: 9 }),
-                shouldAnimate: true,
             },
             {
                 content: "Select any node, and suppose it has at least 6 outgoing blue edges.",
@@ -192,9 +189,10 @@ const StepsByPage = [
                 }),
                 highlightedNodes: [0],
                 shouldAnimate: true,
+                animationDuration: 300,
             },
             {
-                content: "Lets take a look at this subgraph.",
+                content: "Let's take a look at this subgraph.",
                 graph: new KnGraph({
                     n: 7,
                     blueEdges: [[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6]],
@@ -211,7 +209,6 @@ const StepsByPage = [
                     ids: [0, 1, 2, 3, 4, 5, 6]
                 }),
                 highlightedNodes: [1, 2, 3, 4, 5, 6],
-                shouldAnimate: true,
             },
             {
                 content: "Yes! This is K_6! We know that R(3) = 6, so there must be a red or blue triangle in this subgraph.",
@@ -233,9 +230,10 @@ const StepsByPage = [
                 }),
                 highlightedNodes: [],
                 shouldAnimate: true,
+                animationDuration: 300,
             },
             {
-                content: "If there is a blue triangle, we have now formed a blue K_4, triangle in the original graph. ",
+                content: "If there is a blue triangle... ",
                 graph: new KnGraph({
                     n: 7,
                     blueEdges: [[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 2], [1, 4], [4, 2]],
@@ -244,7 +242,7 @@ const StepsByPage = [
                 shouldAnimate: true,
             },
             {
-                content: "Here it is:",
+                content: "we have now formed a blue K_4!  ",
                 graph: new KnGraph({
                     n: 4,
                     blueEdges: [[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 2], [1, 4], [4, 2]],
@@ -253,31 +251,29 @@ const StepsByPage = [
                 shouldAnimate: true,
             },
             {
-                content: "Lets return to our original graph. We have seen that if any node has at least 6 outgoing blue edges, we can find a red triangle or blue K4. So we can assume that any node has at most 5 outgoing blue edges.",
+                content: "Let's return to our original graph. We have seen that if any node has at least 6 outgoing blue edges, we can find a red triangle or blue K4. So we can assume that any node has at most 5 outgoing blue edges.",
                 graph: new KnGraph({ n: 9 }),
                 shouldAnimate: true,
             },
             {
                 content: "Since every node has 8 outgoing edges, and at most 3 are red, and at most 5 are blue, we can conclude that every node has exactly 3 red edges and 5 blue edges.",
                 graph: new KnGraph({ n: 9 }),
-                shouldAnimate: true,
             },
             {
                 content: "Consider an arbitrary coloring of the edges such that each node has 3 outgoing red edges.",
                 graph: new KnGraph({ n: 9, redEdges: [[0, 1], [0, 2], [0, 3], [1, 4], [1, 5], [2, 6], [2, 7], [3, 8], [6, 8], [4, 7], [8, 5]] }),
                 shouldAnimate: true,
+                animationDuration: 300,
                 highlightedNodes: [7]
             },
             {
-                content: "Lets count the number of red edges. Each of the 9 nodes has 3 outgoing red edges, so we count 9 * 3 = 27 red edges. But in this multiplication, each edge is counted twice (once for each endpoint), so there are actually 27 / 2 = 13.5 red edges. This is impossible!",
+                content: "Let's count the number of red edges. Each of the 9 nodes has 3 outgoing red edges, so we count 9 * 3 = 27 red edges. But in this multiplication, each edge is counted twice (once for each endpoint), so there are actually 27 / 2 = 13.5 red edges. This is impossible!",
                 graph: new KnGraph({ n: 9, redEdges: [[0, 1], [0, 2], [0, 3], [1, 4], [1, 5], [2, 6], [2, 7], [3, 8], [6, 8], [4, 7], [8, 5]] }),
-                shouldAnimate: true,
                 highlightedNodes: [7]
             },
             {
                 content: "Finding a non-integer number of edges is a contradiction, hence this red subgraph cannot exist! (Notice I cheated, and the graph displayed does not actually have 3 outgoing red edges for each node)",
                 graph: new KnGraph({ n: 9, redEdges: [[0, 1], [0, 2], [0, 3], [1, 4], [1, 5], [2, 6], [2, 7], [3, 8], [6, 8], [4, 7], [8, 5]] }),
-                shouldAnimate: true,
                 highlightedNodes: [7]
             },
             {
@@ -286,7 +282,7 @@ const StepsByPage = [
                 shouldAnimate: true,
             },
             {
-                content: "Now we will show that R(3,4) > 8. We can do this by constructing a coloring of the edges of K8 with two colors such that there is no red triangle or blue K4.",
+                content: "Now we will show that R(3,4) > 8. We can do this by constructing a coloring of the edges of K8 with two colors such that there is no red triangle or blue K4. Here is such a coloring.",
                 graph: new KnGraph({
                     n: 8,
                     blueEdges: [
@@ -357,15 +353,16 @@ const StepsByPage = [
                 graph: new KnGraph({ n: 18, redEdges: [[0, 6], [0, 7], [0, 3], [0, 4], [0, 10], [0, 14], [0, 15], [0, 8], [0, 9]] }),
                 highlightedNodes: [0],
                 shouldAnimate: true,
+                animationDuration: 300,
             },
             {
-                content: "Lets take a look at this subgraph.",
+                content: "Let's take a look at this subgraph.",
                 graph: new KnGraph({ n: 10, redEdges: [[0, 6], [0, 7], [0, 3], [0, 4], [0, 10], [0, 14], [0, 15], [0, 8], [0, 9]], ids: [0, 3, 4, 6, 7, 8, 9, 10, 14, 15] }),
                 shouldAnimate: true,
                 animationDuration: 2000,
             },
             {
-                content: "Lets look at all these nodes (Except our original selected node).",
+                content: "Take a look at these 9 nodes.",
                 graph: new KnGraph({ n: 10, redEdges: [[0, 6], [0, 7], [0, 3], [0, 4], [0, 10], [0, 14], [0, 15], [0, 8], [0, 9]], ids: [0, 3, 4, 6, 7, 8, 9, 10, 14, 15] }),
                 shouldAnimate: true,
                 highlightedNodes: [3, 4, 6, 7, 8, 9, 10, 14, 15],
