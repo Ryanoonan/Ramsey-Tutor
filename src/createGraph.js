@@ -66,6 +66,15 @@ export class KnGraph {
 
         this.nodes = nodes;
         this.links = links;
+        this.n = n;
+        this.defaultColor = defaultColor;
+        this.redEdges = redEdges;
+        this.blueEdges = blueEdges;
+        this.circleRadius = circleRadius;
+        this.width = width;
+        this.height = height;
+        this.ids = newIds;
+
     }
 }
 
