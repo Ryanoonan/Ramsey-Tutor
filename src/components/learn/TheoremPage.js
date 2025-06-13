@@ -18,6 +18,7 @@ function TheoremPage() {
     });
     const [nextStepIndex, setNextStepIndex] = useState(0);
     const [visibleSteps, setVisibleSteps] = useState([]);
+    const [isAnimating, setIsAnimating] = useState(false);
     const maxStepsToShow = 3;
 
     const currentTheoremData = StepsByPage.filter(item => item.theoremNameSlug === slug)[0] || StepsByPage[0];
@@ -110,6 +111,8 @@ function TheoremPage() {
     const handleNext = () => {
         if (nextStepIndex >= steps.length) return;
 
+        if (isAnimating) return;
+
         const newItem = steps[nextStepIndex];
 
         setShouldAnimate(newItem.shouldAnimate || false);
@@ -128,6 +131,9 @@ function TheoremPage() {
 
     const handlePrevious = () => {
         if (nextStepIndex <= 1) return;
+
+        // If we're still animating, don't allow the action
+        if (isAnimating) return;
 
         const prevIndex = nextStepIndex - 2;
         const prevItem = steps[prevIndex];
@@ -148,6 +154,18 @@ function TheoremPage() {
 
         setNextStepIndex(i => i - 1);
     };
+
+    // Effect to ensure animation state is reset when component unmounts
+    useEffect(() => {
+        return () => {
+            setIsAnimating(false);
+        };
+    }, []);
+
+    // Log animation state changes for debugging
+    useEffect(() => {
+        console.log('Animation state changed:', isAnimating);
+    }, [isAnimating]);
 
     return (
         <Box sx={{
@@ -185,6 +203,7 @@ function TheoremPage() {
                             linkColor={theme.palette.custom.edgeDefault}
                             highlightedNodes={highlightedNodes}
                             shouldAnimate={shouldAnimate}
+                            onAnimationStateChange={setIsAnimating}
                         />
                     </Box>
 
@@ -256,14 +275,14 @@ function TheoremPage() {
                                 <Button
                                     variant="contained"
                                     onClick={handlePrevious}
-                                    disabled={nextStepIndex === 1}
+                                    disabled={nextStepIndex === 1 || isAnimating}
                                 >
                                     Previous
                                 </Button>
                                 <Button
                                     variant="contained"
                                     onClick={handleNext}
-                                    disabled={nextStepIndex >= steps.length}
+                                    disabled={nextStepIndex >= steps.length || isAnimating}
                                 >
                                     Next
                                 </Button>

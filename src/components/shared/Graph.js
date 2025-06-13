@@ -11,8 +11,9 @@ function Graph({
     width = 800,
     height = 600,
     highlightedNodes = null,
-    animationDuration = 3000,
-    shouldAnimate = false
+    animationDuration = 500,
+    shouldAnimate = false,
+    onAnimationStateChange = null
 }) {
 
     const theme = useTheme();
@@ -27,7 +28,7 @@ function Graph({
     const nodeMapRef = useRef({});
     const linkMapRef = useRef({});
 
-    const drawGraph = (nodesToDraw, linksToDraw) => {
+    const drawGraph = useCallback((nodesToDraw, linksToDraw) => {
         if (!canvasRef.current) return;
         const ctx = canvasRef.current.getContext('2d');
         const nodeBorderColor = theme.palette.custom.nodeBorder;
@@ -47,7 +48,7 @@ function Graph({
             ctx.moveTo(source.x, source.y);
             ctx.lineTo(target.x, target.y);
 
-            ctx.strokeStyle = link.color || theme.palette.custom.edgeDefault;
+            ctx.strokeStyle = link.color;
 
             ctx.stroke();
         });
@@ -77,12 +78,12 @@ function Graph({
             ctx.lineWidth = node.radius / 3;
             ctx.stroke();
         });
-    };
+    }, [width, height, theme, highlightedNodes]);
 
 
 
     // Animation loop function
-    const animationTick = (timestamp) => {
+    const animationTick = useCallback((timestamp) => {
         if (!startTimeRef.current) startTimeRef.current = timestamp;
         const elapsedTime = timestamp - startTimeRef.current;
         const progress = Math.min(elapsedTime / animationDuration, 1);
@@ -155,9 +156,13 @@ function Graph({
             nodesRef.current = [...nodes];
             linksRef.current = [...links];
             isAnimatingRef.current = false;
+            if (onAnimationStateChange) {
+                onAnimationStateChange(false);
+            }
             drawGraph(nodes, links);
         }
-    };
+    }, [nodes, links, animationDuration, onAnimationStateChange]);
+
 
     useEffect(() => {
         const newNodeMap = {};
@@ -193,6 +198,10 @@ function Graph({
             startTimeRef.current = null;
             isAnimatingRef.current = true;
 
+            if (onAnimationStateChange) {
+                onAnimationStateChange(true);
+            }
+
             animationRef.current = requestAnimationFrame(animationTick);
         } else {
             nodesRef.current = [...nodes];
@@ -205,7 +214,7 @@ function Graph({
                 cancelAnimationFrame(animationRef.current);
             }
         };
-    }, [nodes, links, drawGraph, animationTick, shouldAnimate]);
+    }, [nodes, links, shouldAnimate, animationTick, onAnimationStateChange]);
 
     return (
         <div style={{ width, height }}>
@@ -217,6 +226,6 @@ function Graph({
             />
         </div>
     );
-};
+}
 
 export default Graph;
