@@ -52,14 +52,7 @@ function LandingPage() {
                 </Typography>
 
                 <Box sx={{ display: 'flex', gap: 3, mt: 4 }}>
-                    <Button
-                        variant="contained"
-                        size="large"
-                        onClick={() => navigate('/learnmenu')}
-                        sx={{ minWidth: 200 }}
-                    >
-                        Learn
-                    </Button>
+
                     <Button
                         variant="contained"
                         size="large"
@@ -67,6 +60,14 @@ function LandingPage() {
                         sx={{ minWidth: 200 }}
                     >
                         Background
+                    </Button>
+                    <Button
+                        variant="contained"
+                        size="large"
+                        onClick={() => navigate('/learnmenu')}
+                        sx={{ minWidth: 200 }}
+                    >
+                        Learn
                     </Button>
                 </Box>
             </Box>
