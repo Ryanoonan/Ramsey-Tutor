@@ -181,7 +181,6 @@ function TheoremPage() {
 
     // Log animation state changes for debugging
     useEffect(() => {
-        console.log('Animation state changed:', isAnimating);
     }, [isAnimating]);
 
     return (
