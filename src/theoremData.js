@@ -120,6 +120,7 @@ const StepsByPage = [
                 graph: infiniteGraphs[8],
                 highlightedNodes: [0, 10, 20, 50, 57, 66, 69],
                 shouldAnimate: true,
+                animationDuration: 3000
             },
             {
                 content: "If we consider the subgraph on these nodes, every single edge between every node is red, and there are infinitely many nodes. Therefore this subgraph is a monochromatic KInf!",
