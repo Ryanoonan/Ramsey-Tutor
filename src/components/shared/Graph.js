@@ -1,6 +1,7 @@
 import { useRef, useEffect, useCallback } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { lerp, lerpColor, easeInOutCubic, applyOpacity } from '../../animationHelpers';
+import Delayed from './Delayed';
 
 function Graph({
     nodes,
@@ -217,14 +218,18 @@ function Graph({
     }, [nodes, links, shouldAnimate, animationTick, onAnimationStateChange, drawGraph]);
 
     return (
-        <div style={{ width, height }}>
-            <canvas
-                ref={canvasRef}
-                width={width}
-                height={height}
-                style={{ cursor: 'pointer' }}
-            />
-        </div>
+        <Delayed>
+            <div style={{ width, height }}>
+                <canvas
+                    ref={canvasRef}
+                    width={width}
+                    height={height}
+                    style={{ cursor: 'pointer' }}
+                />
+            </div>
+
+        </Delayed>
+
     );
 }
 

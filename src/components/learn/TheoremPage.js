@@ -45,11 +45,10 @@ function TheoremPage() {
             let newGraph;
             if (graphData instanceof KInfGraph) {
                 newGraph = graphData.clone();
+                newGraph.resize(dimensions.width, dimensions.height);
             } else {
                 newGraph = new graphClass(params);
             }
-            newGraph.width = dimensions.width;
-            newGraph.height = dimensions.height;
 
             setGraph({
                 nodes: newGraph.nodes,
@@ -94,30 +93,11 @@ function TheoremPage() {
     useEffect(() => {
         const initializeGraph = () => {
             const graphData = currentTheoremData.initialGraph;
-            const graphClass = graphData.constructor;
-
-            const params = {
-                n: graphData.nodes.length,
-                defaultColor: graphData.defaultColor || theme.palette.custom.edgeDefault,
-                redEdges: graphData.redEdges || [],
-                blueEdges: graphData.blueEdges || [],
-                circleRadius: graphData.circleRadius || 150,
-                ids: graphData.ids || graphData.nodes.map(n => n.id),
-                width: dimensions.width,
-                height: dimensions.height
-            };
-            let newGraph;
-            if (graphClass.name === 'KInfGraph') {
-                newGraph = graphData.clone();
-            } else {
-                newGraph = new graphClass(params);
-            }
-            newGraph.width = dimensions.width;
-            newGraph.height = dimensions.height;
+            graphData.resize(dimensions.width, dimensions.height);
 
             setGraph({
-                nodes: newGraph.nodes,
-                links: newGraph.links
+                nodes: graphData.nodes,
+                links: graphData.links
             });
         };
 

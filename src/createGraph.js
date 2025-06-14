@@ -82,6 +82,20 @@ export class KnGraph {
         this.ids = newIds;
 
     }
+    resize(newWidth, newHeight) {
+
+        this.nodes = this.nodes.map((node, i) => {
+
+            return {
+                ...node,
+                x: node.x * (newWidth / this.width),
+                y: node.y * (newHeight / this.height),
+            };
+        });
+        this.width = newWidth;
+        this.height = newHeight;
+        this.links = createCompleteLinks(this.nodes, this.redEdges, this.blueEdges, this.defaultColor, calculateLineWidth(this.n));
+    }
 }
 
 
@@ -140,6 +154,22 @@ export class KInfGraph {
         this.height = height;
         this.ids = newIds;
         this.links = this.getNewLinks();
+    }
+
+    resize(newWidth, newHeight) {
+
+        this.nodes = this.nodes.map((node, i) => {
+
+            return {
+                ...node,
+                x: node.x * (newWidth / this.width),
+                y: node.y * (newHeight / this.height),
+            };
+        });
+        this.width = newWidth;
+        this.height = newHeight;
+        this.links = this.getNewLinks();
+
     }
 
     colorEdgesFromNode(nodeId, color = theme.palette.custom.edgeDefault) {
