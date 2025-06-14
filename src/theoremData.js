@@ -89,7 +89,8 @@ const StepsByPage = [
                 content: "Now, Let's keep only the nodes in the graph that are connected to the second selected node by a red edge. We are once again still inside a KInf graph.",
                 graph: infiniteGraphs[5],
                 shouldAnimate: true,
-                highlightedNodes: [0, 70]
+                highlightedNodes: [0, 70],
+                animationDuration: 4000
             },
             {
                 content: "Now we have a infinite Kn, with one node with only outgoing red edges, and one node with only outgoing blue edges. We can continue this process infinitely.",

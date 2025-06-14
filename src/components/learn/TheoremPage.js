@@ -5,6 +5,7 @@ import StepsByPage from '../../theoremData';
 import { useParams } from 'react-router-dom'
 import AppBar from '../shared/AppBar';
 import { InlineMath } from 'react-katex';
+import { KInfGraph } from '../../createGraph';
 
 function TheoremPage() {
     const { slug } = useParams();
@@ -42,7 +43,7 @@ function TheoremPage() {
             };
 
             let newGraph;
-            if (graphClass.name === 'KInfGraph') {
+            if (graphData instanceof KInfGraph) {
                 newGraph = graphData.clone();
             } else {
                 newGraph = new graphClass(params);
