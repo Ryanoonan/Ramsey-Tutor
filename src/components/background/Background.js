@@ -42,7 +42,7 @@ function Background() {
                     </Typography>
 
                     <Typography variant="body1" color="text.secondary" sx={{ textAlign: 'justify' }}>
-                        Ramsey Theory is a essentially asks the question: "How large must a structure be to guarantee a certain property?". We define the <strong>ramsey number</strong> <InlineMath>{"R(n)"}</InlineMath>
+                        Ramsey Theory essentially asks the question: "How large must a structure be to guarantee a certain property?". We define the <strong>ramsey number</strong> <InlineMath>{"R(n)"}</InlineMath>
                         as the smallest number of vertices such that if you take a graph with <InlineMath>{"R(n)"}</InlineMath> vertices, and color its edges with two colors (say red and blue), then you are guaranteed to find a complete subgraph of size <InlineMath>{"n"}</InlineMath> in one of the colors.
                         For example, the Ramsey number <InlineMath>{"R(3) = 6"}</InlineMath> (We will prove this), means that if you color <InlineMath>{"K_6"}</InlineMath> with two colors, you are guaranteed to find a monochromatic triangle (a red or blue triangle).
                     </Typography>
