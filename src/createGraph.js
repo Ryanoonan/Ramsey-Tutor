@@ -83,13 +83,14 @@ export class KnGraph {
 
     }
     resize(newWidth, newHeight) {
+        const scaleFactor = Math.min(newWidth / this.width, newHeight / this.height);
 
         this.nodes = this.nodes.map((node, i) => {
 
             return {
                 ...node,
-                x: node.x * (newWidth / this.width),
-                y: node.y * (newHeight / this.height),
+                x: node.x * scaleFactor,
+                y: node.y * scaleFactor,
             };
         });
         this.width = newWidth;
@@ -159,11 +160,11 @@ export class KInfGraph {
     resize(newWidth, newHeight) {
 
         this.nodes = this.nodes.map((node, i) => {
-
+            const scaleFactor = Math.min(newWidth / this.width, newHeight / this.height);
             return {
                 ...node,
-                x: node.x * (newWidth / this.width),
-                y: node.y * (newHeight / this.height),
+                x: node.x * scaleFactor,
+                y: node.y * scaleFactor,
             };
         });
         this.width = newWidth;

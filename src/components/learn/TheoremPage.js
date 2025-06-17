@@ -30,6 +30,7 @@ function TheoremPage() {
     const executeStepAction = (step) => {
         if (step.graph) {
             const graphData = step.graph;
+            graphData.resize(dimensions.width, dimensions.height);
             const graphClass = graphData.constructor;
             const params = {
                 n: graphData.nodes.length,
@@ -75,13 +76,11 @@ function TheoremPage() {
 
     useEffect(() => {
         const updateDimensions = () => {
-            const graphContainer = document.getElementById('learn-graph-container');
-            if (graphContainer) {
-                setDimensions({
-                    width: graphContainer.offsetWidth,
-                    height: graphContainer.offsetHeight
-                });
-            }
+            setDimensions({
+                width: window.innerWidth * 0.45,
+                height: window.innerHeight * 0.8
+            });
+
         };
 
         window.addEventListener('resize', updateDimensions);
