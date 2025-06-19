@@ -39,12 +39,17 @@ const StepsByPage = [
             {
                 content: 'We have formed a blue triangle! Therefore it is impossible to color the edges of K6 with 2 colors without forming a monochromatic triangle.',
                 graph: new KnGraph({ n: 4, redEdges: [[0, 1], [0, 2], [0, 3]], blueEdges: [[1, 2], [1, 3], [2, 3]] }),
-            }
+            },
+            {
+                content: 'To show R(3) > 5, we can construct a coloring of the edges of K5 with 2 colors such that there is no monochromatic triangle. Here is such a coloring. Therefore R(3) = 6.',
+                graph: new KnGraph({ n: 5, redEdges: [[0, 2], [1, 3], [2, 4], [3, 0], [4, 1], [0, 3], [1, 4], [2, 0], [3, 1], [4, 2]], blueEdges: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 0]] }),
+                shouldAnimate: true,
+            },
 
         ]
     },
     {
-        theoremName: "R(\\aleph_0) \\geq \\aleph_0",
+        theoremName: "R(\\aleph_0) = \\aleph_0",
         theoremNameSlug: "r-inf-greater-than-inf",
         initialGraph: infiniteGraphs[0],
         steps: [
@@ -128,6 +133,11 @@ const StepsByPage = [
                 highlightedNodes: [0, 10, 20, 50, 57, 66, 69].concat([0, 10, 20, 50, 57, 66, 69].concat([70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132])),
                 shouldAnimate: true,
                 animationDuration: 4000,
+            },
+            {
+                content: "Now we clearly cannot have a monochromatic KInf inside a finite graph, so we can conclude R(ℵ0) = ℵ0.",
+                graph: infiniteGraphs[9],
+                highlightedNodes: [0, 10, 20, 50, 57, 66, 69].concat([0, 10, 20, 50, 57, 66, 69].concat([70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132])),
             }
 
         ]
@@ -335,7 +345,7 @@ const StepsByPage = [
         ]
     },
     {
-        theoremName: "R(4,4) = 18",
+        theoremName: "R(4,4) \\geq 18",
         theoremNameSlug: "r4-4-equals-18",
         initialGraph: new KnGraph({ n: 18 }),
         steps: [
@@ -386,7 +396,7 @@ const StepsByPage = [
                 animationDuration: 2000,
             },
             {
-                content: "We have a red K4!",
+                content: "We have a red K4! Therefore it is impossible to color the edges of K18 with 2 colors without forming a monochromatic K4.",
                 graph: new KnGraph({ n: 4, redEdges: [[0, 9], [0, 8], [0, 15], [8, 15], [9, 15], [8, 9]], ids: [0, 8, 9, 15] }),
                 shouldAnimate: true,
                 animationDuration: 2000,
